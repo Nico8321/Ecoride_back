@@ -32,7 +32,7 @@ class UtilisateurController
             echo json_encode(["error" => "Email déjà utilisé"]);
             return;
         }
-
+        $data['role_id'] = 3; // rôle utilisateur par défaut 
         $utilisateur = new Utilisateur($data);
         $utilisateur->save($this->pdo);
         echo json_encode(["message" => "Utilisateur créé"]);
@@ -62,6 +62,7 @@ class UtilisateurController
             echo json_encode(["error" => "Utilisateur non trouvé ou non modifié"]);
         }
     }
+
     public function patchUserPassword($id, $data)
     {
         $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
@@ -71,6 +72,20 @@ class UtilisateurController
 
             if ($success) {
                 echo json_encode(["message" => "Mot de passe modifié"]);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Utilisateur non trouvé ou non modifié"]);
+            }
+        }
+    }
+
+    public function deleteUser($id)
+    {
+        $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
+        if ($utilisateur) {
+            $success = Utilisateur::deleteUtilisateur($this->pdo, $id);
+            if ($success) {
+                echo json_encode(["message" => "Utilisateur supprimé"]);
             } else {
                 http_response_code(404);
                 echo json_encode(["error" => "Utilisateur non trouvé ou non modifié"]);
