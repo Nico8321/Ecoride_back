@@ -2,19 +2,19 @@
 
 class Utilisateur
 {
-    public $id;
-    public $pseudo;
-    public $nom;
-    public $prenom;
-    public $email;
-    public $password;
-    public $telephone;
-    public $adresse;
-    public $code_postal;
-    public $photo;
-    public $credit;
-    public $role_id;
-    public $voiture_id;
+    private $id;
+    private $pseudo;
+    private $nom;
+    private $prenom;
+    private $email;
+    private $password;
+    private $telephone;
+    private $adresse;
+    private $code_postal;
+    private $photo;
+    private $credit;
+    private $role_id;
+    private $voiture_id;
 
     public function __construct($data)
     {
@@ -30,6 +30,59 @@ class Utilisateur
         $this->credit = $data['credit'];
         $this->role_id = $data['role_id'];
         $this->voiture_id = $data['voiture_id'];
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function getPseudo()
+    {
+        return $this->pseudo;
+    }
+    public function getNom()
+    {
+        return $this->nom;
+    }
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    public function getPassword()
+    {
+        return $this->password;
+    }
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+    public function getCodePostal()
+    {
+        return $this->code_postal;
+    }
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+    public function getCredit()
+    {
+        return $this->credit;
+    }
+    public function getRoleId()
+    {
+        return $this->role_id;
+    }
+    public function getVoitureId()
+    {
+        return $this->voiture_id;
     }
 
     public function save(PDO $pdo)   // enregistrer un nouvelle utilisateur dans la bdd 
@@ -53,7 +106,7 @@ class Utilisateur
 
     public static function findUtilisateurById(PDO $pdo, $id)    // trouver un utilisateur par son id 
     {
-        $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE utilisateur_id = ?");
+        $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -98,6 +151,16 @@ class Utilisateur
 
         return $stmt->execute([
             $hashedPassword,
+            $id
+        ]);
+    }
+    public static function deleteUtilisateur(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        DELETE FROM utilisateur WHERE id = ?
+    ");
+
+        return $stmt->execute([
             $id
         ]);
     }
