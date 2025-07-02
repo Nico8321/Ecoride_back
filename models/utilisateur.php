@@ -14,7 +14,6 @@ class Utilisateur
     private $photo;
     private $credit;
     private $role_id;
-    private $voiture_id;
 
     public function __construct($data)
     {
@@ -29,7 +28,6 @@ class Utilisateur
         $this->photo = $data['photo'];
         $this->credit = $data['credit'];
         $this->role_id = $data['role_id'];
-        $this->voiture_id = $data['voiture_id'];
     }
 
     public function getId()
@@ -80,14 +78,10 @@ class Utilisateur
     {
         return $this->role_id;
     }
-    public function getVoitureId()
-    {
-        return $this->voiture_id;
-    }
 
     public function save(PDO $pdo)   // enregistrer un nouvelle utilisateur dans la bdd 
     {
-        $stmt = $pdo->prepare("INSERT INTO utilisateur (pseudo, nom, prenom, email, password, telephone, adresse, code_postal, photo, credit, role_id, voiture_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO utilisateur (pseudo, nom, prenom, email, password, telephone, adresse, code_postal, photo, credit, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $this->pseudo,
             $this->nom,
@@ -99,8 +93,7 @@ class Utilisateur
             $this->code_postal,
             $this->photo,
             $this->credit,
-            $this->role_id,
-            $this->voiture_id
+            $this->role_id
         ]);
     }
 
@@ -128,7 +121,7 @@ class Utilisateur
         $stmt = $pdo->prepare("
         UPDATE utilisateur SET
             pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, adresse = ?
-        WHERE utilisateur_id = ?
+        WHERE id = ?
     ");
 
         return $stmt->execute([
@@ -146,7 +139,7 @@ class Utilisateur
         $stmt = $pdo->prepare("
         UPDATE utilisateur SET
             password = ?
-        WHERE utilisateur_id = ?
+        WHERE id = ?
     ");
 
         return $stmt->execute([

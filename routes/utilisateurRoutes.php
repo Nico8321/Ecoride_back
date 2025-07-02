@@ -23,3 +23,6 @@ if ($method === 'PATCH' && $uri[0] === 'user' && isset($uri[1]) && $uri[2] === "
     $data = json_decode(file_get_contents("php://input"), true);
     $controller->patchUserPassword($uri[1], $data);
 }
+if ($method === 'DELETE' && $uri[0] === 'user' && isset($uri[1]) && !isset($uri[2])) {
+    $controller->deleteUser($uri[1]);
+}
