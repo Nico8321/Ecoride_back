@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/models/voiture.php';
+require_once __DIR__ . '/models/vehicule.php';
 require_once __DIR__ . '/config/database.php';
 
-class voitureController
+class vehiculeController
 {
     private $pdo;
 
@@ -16,7 +16,7 @@ class voitureController
         return $this->pdo;
     }
 
-    public function addVoiture($data, $id)
+    public function addVehicule($data, $id)
     {
         $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
 
@@ -26,38 +26,38 @@ class voitureController
             return;
         }
 
-        $nbVoitures = Voiture::countByUtilisateurId($this->pdo, $id);
+        $nbVehicules = Vehicule::countByUtilisateurId($this->pdo, $id);
 
-        if ($nbVoitures >= 3) {
+        if ($nbVehicules >= 3) {
             http_response_code(403);
             echo json_encode(["error" => "Nombre maximal de véhicules atteint"]);
             return;
         }
 
-        // Ajoute la voiture
-        $voiture = new Voiture($data, $id);
-        $voiture->save($this->pdo, $id);
-        echo json_encode(["message" => "Voiture ajoutée avec succès"]);
+        // Ajoute le vehicule
+        $vehicule = new Vehicule($data, $id);
+        $vehicule->save($this->pdo, $id);
+        echo json_encode(["message" => "Vehicule ajouté avec succès"]);
         return;
     }
 
 
-    public function deleteVoiture($utilisateur_id, $id)
+    public function deleteVehicule($utilisateur_id, $id)
     {
-        $voiture = Voiture::findById($this->pdo, $id);
-        if (!$voiture) {
+        $vehicule = Vehicule::findById($this->pdo, $id);
+        if (!$vehicule) {
             http_response_code(404);
             echo json_encode(["error" => "Véhicule non trouvé"]);
             return;
         }
 
-        if ($voiture["utilisateur_id"] !== $utilisateur_id) {
+        if ($vehicule["utilisateur_id"] !== $utilisateur_id) {
             http_response_code(403);
             echo json_encode(["error" => "Suppression non autorisée"]);
             return;
         }
 
-        $success = Voiture::deleteVoiture($this->pdo, $id);
+        $success = Vehicule::deleteVehicule($this->pdo, $id);
         if ($success) {
             echo json_encode(["message" => "Véhicule supprimé"]);
         } else {

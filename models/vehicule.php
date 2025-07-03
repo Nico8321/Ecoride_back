@@ -1,6 +1,6 @@
 <?php
 
-class Voiture
+class Vehicule
 {
     private $id;
     private $marque;
@@ -33,7 +33,7 @@ class Voiture
     }
     public function save(PDO $pdo, $utilisateurId) // enregistrer le vehicule dans la bdd 
     {
-        $stmt = $pdo->prepare("INSERT INTO voiture (marque, modele, energie, utilisateur_id) VALUES (?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO vehicule (marque, modele, energie, utilisateur_id) VALUES (?, ?, ?, ?)");
         $stmt->execute([
             $this->marque,
             $this->modele,
@@ -43,15 +43,15 @@ class Voiture
     }
     public static function findById(PDO $pdo, $id) // trouver un vehicule par son id 
     {
-        $stmt = $pdo->prepare("SELECT * FROM voiture WHERE id = ?");
+        $stmt = $pdo->prepare("SELECT * FROM vehicule WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function deleteVoiture(PDO $pdo, $id)
+    public static function deleteVehicule(PDO $pdo, $id)
     {
         $stmt = $pdo->prepare("
-        DELETE FROM voiture WHERE id = ?
+        DELETE FROM vehicule WHERE id = ?
     ");
 
         return $stmt->execute([
@@ -59,10 +59,10 @@ class Voiture
         ]);
     }
 
-    public static function countByUtilisateurId(PDO $pdo, $utilisateurId)
+    public static function countByUtilisateurId(PDO $pdo, $utilisateur_id)
     {
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM voiture WHERE utilisateur_id = ?");
-        $stmt->execute([$utilisateurId]);
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM vehicule WHERE utilisateur_id = ?");
+        $stmt->execute([$utilisateur_id]);
         return $stmt->fetchColumn();
     }
 }
