@@ -1,0 +1,65 @@
+<?php
+require_once __DIR__ . '/models/covoiturage.php';
+require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/utils/apiAdresse.php';
+
+class CovoiturageController
+{
+    private $pdo;
+    public function __construct()
+    {
+        $this->pdo = Database::getConnection();
+    }
+    public function getPdo()
+    {
+        return $this->pdo;
+    }
+    public function getByConducteurId($id)
+    {
+        $covoiturages = Covoiturage::findCovoiturageByUtilisateurId($this->pdo, $id);
+        if ($covoiturages) {
+            echo json_encode($covoiturages);
+        } else {
+            echo json_encode([]);
+        }
+    }
+    public function decoupageAdresse($data)
+    {
+        $depart = $data['depart'];
+        $arrivee = $data['arrivee'];
+        $infos = getAdresseDetailsFromAPI($depart);
+
+        $data['rueDepart'] = $infos['rue'];
+        $data['codePostalDepart'] = $infos['codePostal'];
+        $data['villeDepart'] = $infos['ville'];
+        $data['latitudeDepart'] = $infos['latitude'];
+        $data['longitudeDepart'] = $infos['longitude'];
+
+        $infos = getAdresseDetailsFromAPI($arrivee);
+        $data['rueArrivee'] = $infos['rue'];
+        $data['codePostalArrivee'] = $infos['codePostal'];
+        $data['villeArrivee'] = $infos['ville'];
+        $data['latitudeArrivee'] = $infos['latitude'];
+        $data['longitudeArrivee'] = $infos['longitude'];
+        return $data;
+    }
+
+    public function addCovoiturage($data)
+    {
+        $data = $this->decoupageAdresse($data);
+        $covoiturage = new Covoiturage($data);
+        $covoiturage->save($this->pdo);
+
+        echo json_encode(["message" => "Covoiturage créé"]);
+    }
+    public function rechercheCovoiturages($filtres)
+    {
+        $covoiturages = Covoiturage::findCovoiturageByFilter($this->pdo, $filtres);
+        if (!$covoiturages) {
+            http_response_code(404);
+            echo json_encode(["error" => "Aucun covoiturage trouvé"]);
+        } else {
+            echo json_encode($covoiturages);
+        }
+    }
+}
