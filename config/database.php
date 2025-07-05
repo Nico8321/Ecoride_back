@@ -1,5 +1,8 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 //creation de la classe Database pour la connexion à la base de données MySQL
 class Database
 {

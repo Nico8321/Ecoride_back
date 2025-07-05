@@ -2,6 +2,7 @@
 require_once __DIR__ . '/models/utilisateur.php';
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/utils/securisationSortie.php';
+require_once __DIR__ . '/controllers/authController.php';
 
 class UtilisateurController
 {
@@ -45,6 +46,9 @@ class UtilisateurController
 
         if ($utilisateur && password_verify($data['password'], $utilisateur['password'])) {
             unset($utilisateur['password']);
+            $auth = new AuthController();
+            $token = $auth->generateJWT($utilisateur['id']);
+            $utilisateur['token'] = $token;
             echo json_encode(securisationSortie($utilisateur));
         } else {
             http_response_code(401);
