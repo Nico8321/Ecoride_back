@@ -43,7 +43,7 @@ class vehiculeController
     }
 
 
-    public function deleteVehicule($utilisateur_id, $id)
+    public function deleteVehicule($id, $utilisateur_id)
     {
         $vehicule = Vehicule::findById($this->pdo, $id);
         if (!$vehicule) {

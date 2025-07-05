@@ -3,7 +3,7 @@ require_once __DIR__ . '/controllers/authController.php';
 
 $controller = new authController();
 $method = $_SERVER['REQUEST_METHOD'];
-$uri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+
 
 header('Content-Type: application/json');
 

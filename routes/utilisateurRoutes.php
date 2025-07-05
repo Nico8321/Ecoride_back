@@ -4,7 +4,7 @@ require_once __DIR__ . '/controllers/UtilisateurController.php';
 
 $controller = new UtilisateurController();
 $method = $_SERVER['REQUEST_METHOD'];
-$uri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+
 
 header('Content-Type: application/json');
 
