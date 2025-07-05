@@ -155,6 +155,12 @@ class Covoiturage
         $stmt->execute([$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public static function findCovoiturageById(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("SELECT * FROM covoiturage WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     public static function findCovoiturageByFilter(PDO $pdo, $filtres)
     {
         $conditions = [];
