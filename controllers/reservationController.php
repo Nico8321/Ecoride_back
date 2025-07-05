@@ -2,6 +2,7 @@
 require_once __DIR__ . "/models/reservation.php";
 require_once __DIR__ . "/config/database.php";
 require_once __DIR__ . '/models/covoiturage.php';
+require_once __DIR__ . '/utils/securisationSortie.php';
 
 class ReservationController
 {
@@ -36,7 +37,7 @@ class ReservationController
             http_response_code(404);
             echo json_encode(["error" => "Aucune réservation trouvée"]);
         } else {
-            echo json_encode($reservations);
+            echo json_encode(securisationSortie($reservations));
         }
     }
 }

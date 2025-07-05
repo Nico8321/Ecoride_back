@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/models/utilisateur.php';
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/utils/securisationSortie.php';
 
 class UtilisateurController
 {
@@ -22,7 +23,7 @@ class UtilisateurController
         if ($utilisateur) {
             unset($utilisateur['password']);
         }
-        echo json_encode($utilisateur);
+        echo json_encode(securisationSortie($utilisateur));
     }
 
     public function signUp($data)
@@ -44,7 +45,7 @@ class UtilisateurController
 
         if ($utilisateur && password_verify($data['password'], $utilisateur['password'])) {
             unset($utilisateur['password']);
-            echo json_encode($utilisateur);
+            echo json_encode(securisationSortie($utilisateur));
         } else {
             http_response_code(401);
             echo json_encode(["error" => "Identifiants invalides"]);
