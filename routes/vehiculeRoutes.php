@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/controllers/vehiculeController.php';
+require_once __DIR__ . '/../controllers/vehiculeController.php';
 
 $controller = new VehiculeController();
 $method = $_SERVER['REQUEST_METHOD'];

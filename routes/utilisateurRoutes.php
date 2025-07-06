@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/controllers/UtilisateurController.php';
+require_once __DIR__ . '/../controllers/utilisateurController.php';
 
 
 $controller = new UtilisateurController();
@@ -8,11 +8,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 header('Content-Type: application/json');
 
-if ($method === 'POST' && $uri[0] === 'signup') {
+if ($method === 'POST' && $uri[0] === 'user' && $uri[1] === 'signup') {
     $data = json_decode(file_get_contents("php://input"), true);
     $controller->signUp($data);
 }
-if ($method === 'POST' && $uri[0] === 'signin') {
+if ($method === 'POST' && $uri[0] === 'user' && $uri[1] === 'signin') {
     $data = json_decode(file_get_contents("php://input"), true);
     $controller->signIn($data);
 }

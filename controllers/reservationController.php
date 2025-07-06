@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . "/models/reservation.php";
-require_once __DIR__ . "/config/database.php";
-require_once __DIR__ . '/models/covoiturage.php';
-require_once __DIR__ . '/utils/securisationSortie.php';
+require_once __DIR__ . "/../models/reservation.php";
+require_once __DIR__ . "/../config/database.php";
+require_once __DIR__ . '/../models/covoiturage.php';
+require_once __DIR__ . '/../utils/securisationSortie.php';
 
 class ReservationController
 {

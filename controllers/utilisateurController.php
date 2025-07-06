@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/models/utilisateur.php';
-require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/utils/securisationSortie.php';
-require_once __DIR__ . '/controllers/authController.php';
+require_once __DIR__ . '/../models/utilisateur.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../utils/securisationSortie.php';
+require_once __DIR__ . '/../controllers/authController.php';
 
 class UtilisateurController
 {
