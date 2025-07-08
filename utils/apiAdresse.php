@@ -5,7 +5,7 @@ function getCoordinatesFromAddress($rue, $codePostal, $ville)
     $url = "https://api-adresse.data.gouv.fr/search/?q=$query&limit=1";
 
     $response = file_get_contents($url);
-    if ($response === FALSE) {
+    if (!$response) {
         return null;
     }
 
@@ -28,7 +28,7 @@ function getAdresseDetailsFromAPI($adresse)
     $url = "https://api-adresse.data.gouv.fr/search/?q=$query&limit=1";
 
     $response = file_get_contents($url);
-    if ($response === FALSE) {
+    if (!$response) {
         return null;
     }
 

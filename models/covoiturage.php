@@ -21,6 +21,7 @@ class Covoiturage
     private $statut;
     private $fumeur;
     private $animaux;
+    private $duree;
 
 
     public function __construct($data)
@@ -113,6 +114,10 @@ class Covoiturage
     {
         return $this->animaux;
     }
+    public function getDuree()
+    {
+        return $this->duree;
+    }
 
     public function save(PDO $pdo)
     {
@@ -126,7 +131,7 @@ class Covoiturage
             longitude_arrivee, date_depart,
             heure_depart,
              nb_places, prix, statut,
-              fumeur, animaux) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+              fumeur, animaux, duree) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)");
         $stmt->execute([
             $this->conducteurId,
             $this->vehiculeId,
@@ -146,7 +151,8 @@ class Covoiturage
             $this->prix,
             $this->statut,
             $this->fumeur,
-            $this->animaux
+            $this->animaux,
+            $this->duree
         ]);
     }
     public static function findCovoiturageByUtilisateurId(PDO $pdo, $id)
@@ -193,6 +199,10 @@ class Covoiturage
         if (!empty($filtres['energie'])) {
             $conditions[] = "vehicule_id IN (SELECT id FROM vehicule WHERE energie = ?)";
             $params[] = $filtres['energie'];
+        }
+        if (!empty($filtres['duree'])) {
+            $conditions[] = "duree >= ?";
+            $params[] = $filtres['duree'];
         }
 
         $sql = "SELECT c.*, u.note 
