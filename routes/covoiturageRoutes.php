@@ -25,6 +25,7 @@ if ($method === 'GET' && $uri[0] === 'covoiturage' && count($uri) === 1) {
         'prix' => $_GET['prix'] ?? null,
         'note' => $_GET['note'] ?? null,
         'energie' => $_GET['energie'] ?? null,
+        'duree' => $_GET['duree'] ?? null,
     ];
     $controller->rechercheCovoiturages($filtres);
 }

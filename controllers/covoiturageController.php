@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../models/covoiturage.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/apiAdresse.php';
+require_once __DIR__ . '/../utils/apiOsrm.php';
 
 class CovoiturageController
 {
@@ -46,12 +47,19 @@ class CovoiturageController
 
     public function addCovoiturage($data)
     {
-        $data = $this->decoupageAdresse($data);
-        $covoiturage = new Covoiturage($data);
+        $dataWithAdresse = $this->decoupageAdresse($data);
+        $dataWithDuree = $this->addDureeTrajet($dataWithAdresse);
+        $covoiturage = new Covoiturage($dataWithDuree);
         $covoiturage->save($this->pdo);
 
         echo json_encode(["message" => "Covoiturage créé"]);
     }
+    public function addDureeTrajet($data)
+    {
+        $data = getDureeTrajet($data);
+        return $data;
+    }
+
     public function rechercheCovoiturages($filtres)
     {
         $covoiturages = Covoiturage::findCovoiturageByFilter($this->pdo, $filtres);
