@@ -36,7 +36,8 @@ class vehiculeController
         }
 
         // Ajoute le vehicule
-        $vehicule = new Vehicule($data, $id);
+        $data['utilisateur_id'] = $id;
+        $vehicule = new Vehicule($data);
         $vehicule->save($this->pdo, $id);
         echo json_encode(["message" => "Vehicule ajouté avec succès"]);
         return;
