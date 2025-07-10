@@ -53,7 +53,7 @@ class Vehicule
     {
         return $this->utilisateur_id;
     }
-    public function save(PDO $pdo, $utilisateurId) // enregistrer le vehicule dans la bdd 
+    public function save(PDO $pdo) // enregistrer le vehicule dans la bdd 
     {
         $stmt = $pdo->prepare("INSERT INTO vehicule (immatriculation, dateImmat, marque, modele, energie, couleur, utilisateur_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
@@ -63,7 +63,7 @@ class Vehicule
             $this->modele,
             $this->energie,
             $this->couleur,
-            $utilisateurId
+            $this->utilisateur_id
         ]);
     }
     public static function findById(PDO $pdo, $id) // trouver un vehicule par son id 
