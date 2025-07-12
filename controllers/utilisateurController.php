@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../models/utilisateur.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/securisationSortie.php';
@@ -95,6 +96,61 @@ class UtilisateurController
                 http_response_code(404);
                 echo json_encode(["error" => "Utilisateur non trouvé ou non modifié"]);
             }
+        }
+    }
+    public function addPhoto($id)
+    {
+        $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
+        if ($utilisateur) {
+            if (isset($_FILES['photo'])) {
+                if ($_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+                    $check = getimagesize($_FILES['photo']['tmp_name']);
+                    if ($check === false) {
+                        http_response_code(400);
+                        echo json_encode(["error" => "Le fichier n'est pas une image."]);
+                        return;
+                    }
+
+                    // Sécurisation + déplacement du fichier
+                    $emplacement = __DIR__ . '/../uploads/photos/';
+                    if (!file_exists($emplacement)) {
+                        mkdir($emplacement, 0777, true);
+                    }
+
+                    $extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+                    $extensionsAutorisées = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+                    if (!in_array(strtolower($extension), $extensionsAutorisées)) {
+                        http_response_code(400);
+                        echo json_encode(["error" => "Extension de fichier non autorisée."]);
+                        return;
+                    }
+
+                    $newFileName = uniqid("user_{$id}_", true) . '.' . $extension;
+                    $targetFile = $emplacement . $newFileName;
+
+                    if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
+                        Utilisateur::updatePhotoFilename($this->pdo, $id, $newFileName);
+                        echo json_encode(["message" => "Photo enregistrée avec succès", "filename" => $newFileName]);
+                    } else {
+                        http_response_code(500);
+                        echo json_encode(["error" => "Erreur lors du déplacement du fichier."]);
+                    }
+                    return;
+                } else {
+                    http_response_code(400);
+                    echo json_encode(["error" => "Erreur lors de l'upload."]);
+                    return;
+                }
+            } else {
+                http_response_code(400);
+                echo json_encode(["error" => "Aucun fichier reçu."]);
+                return;
+            }
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "Utilisateur non trouvé."]);
+            return;
         }
     }
 }

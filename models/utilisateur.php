@@ -157,4 +157,9 @@ class Utilisateur
             $id
         ]);
     }
+    public static function updatePhotoFilename(PDO $pdo, $id, $filename)
+    {
+        $stmt = $pdo->prepare("UPDATE utilisateur SET photo = ? WHERE id = ?");
+        return $stmt->execute([$filename, $id]);
+    }
 }
