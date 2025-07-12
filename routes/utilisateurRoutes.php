@@ -27,3 +27,6 @@ if ($method === 'PATCH' && $uri[0] === 'user' && isset($uri[1]) && $uri[2] === "
 if ($method === 'DELETE' && $uri[0] === 'user' && isset($uri[1]) && !isset($uri[2])) {
     $controller->deleteUser($uri[1]);
 }
+if ($method === 'POST' && $uri[0] === 'user' && $uri[1] === 'photo' && isset($uri[2])) {
+    $controller->addPhoto($uri[2]);
+}
