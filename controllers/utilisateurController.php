@@ -100,10 +100,14 @@ class UtilisateurController
     }
     public function addPhoto($id)
     {
+        // vérifie si l'utilisateur existe
         $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
         if ($utilisateur) {
+            // vérifie si une photo a été envoyée
             if (isset($_FILES['photo'])) {
+                // vérifie si aucune erreur à l'upload
                 if ($_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+                    // vérifie si le fichier est bien une image
                     $check = getimagesize($_FILES['photo']['tmp_name']);
                     if ($check === false) {
                         http_response_code(400);
@@ -113,22 +117,39 @@ class UtilisateurController
 
                     // Sécurisation + déplacement du fichier
                     $emplacement = __DIR__ . '/../uploads/photos/';
+                    // si le dossier n'existe pas, on le crée
                     if (!file_exists($emplacement)) {
                         mkdir($emplacement, 0777, true);
                     }
 
-                    $extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-                    $extensionsAutorisées = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+                    $extension = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+                    $mimeType = mime_content_type($_FILES['photo']['tmp_name']);
 
-                    if (!in_array(strtolower($extension), $extensionsAutorisées)) {
+                    $typesAutorises = [
+                        'jpg'  => 'image/jpeg',
+                        'jpeg' => 'image/jpeg',
+                        'png'  => 'image/png',
+                        'gif'  => 'image/gif',
+                        'webp' => 'image/webp',
+                    ];
+
+                    // vérifie l'extension autorisée
+                    if (!array_key_exists($extension, $typesAutorises)) {
                         http_response_code(400);
                         echo json_encode(["error" => "Extension de fichier non autorisée."]);
                         return;
                     }
 
+                    // vérifie que le type mime correspond bien à l'extension
+                    if ($mimeType !== $typesAutorises[$extension]) {
+                        http_response_code(400);
+                        echo json_encode(["error" => "Type MIME non autorisé."]);
+                        return;
+                    }
+
                     $newFileName = uniqid("user_{$id}_", true) . '.' . $extension;
                     $targetFile = $emplacement . $newFileName;
-
+                    // si le fichier est bien déplacé alors on l'enregistre en base
                     if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
                         Utilisateur::updatePhotoFilename($this->pdo, $id, $newFileName);
                         echo json_encode(["message" => "Photo enregistrée avec succès", "filename" => $newFileName]);

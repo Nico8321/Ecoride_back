@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/covoiturage.php';
+require_once __DIR__ . '/../models/utilisateur.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/apiAdresse.php';
 require_once __DIR__ . '/../utils/apiOsrm.php';
@@ -67,6 +68,16 @@ class CovoiturageController
             http_response_code(404);
             echo json_encode(["error" => "Aucun covoiturage trouvé"]);
         } else {
+            foreach ($covoiturages as &$covoiturage) {
+                $conducteurId = $covoiturage['conducteur_id'];
+                $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $conducteurId);
+                if ($utilisateur) {
+                    $covoiturage['conducteur_photo'] = $utilisateur['photo']
+                        ? 'http://localhost/ecoride/uploads/photos/' . $utilisateur['photo']
+                        : null;
+                    $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
+                }
+            }
             echo json_encode($covoiturages);
         }
     }
