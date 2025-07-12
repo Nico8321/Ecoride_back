@@ -146,6 +146,12 @@ class UtilisateurController
                         echo json_encode(["error" => "Type MIME non autorisé."]);
                         return;
                     }
+                    // vérifie que la taille du fichier est inférieure à 2 Mo
+                    if ($_FILES['photo']['size'] > 2 * 1024 * 1024) {
+                        http_response_code(400);
+                        echo json_encode(["error" => "Fichier trop volumineux (max 2 Mo)."]);
+                        return;
+                    }
 
                     $newFileName = uniqid("user_{$id}_", true) . '.' . $extension;
                     $targetFile = $emplacement . $newFileName;
