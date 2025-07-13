@@ -10,7 +10,6 @@ class Utilisateur
     private $password;
     private $telephone;
     private $adresse;
-    private $code_postal;
     private $photo;
     private $credit;
     private $role_id;
@@ -22,11 +21,10 @@ class Utilisateur
         $this->prenom = $data['prenom'];
         $this->email = $data['email'];
         $this->password = password_hash($data['password'], PASSWORD_BCRYPT);
-        $this->telephone = $data['telephone'];
-        $this->adresse = $data['adresse'];
-        $this->code_postal = $data['code_postal'];
-        $this->photo = $data['photo'];
-        $this->credit = $data['credit'];
+        $this->telephone = $data['telephone'] ?? null;
+        $this->adresse = $data['adresse'] ?? null;
+        $this->photo = $data['photo'] ?? null;
+        $this->credit = (isset($data['credit']) && $data['credit'] !== null) ? intval($data['credit']) : 20;
         $this->role_id = $data['role_id'];
     }
 
@@ -62,10 +60,6 @@ class Utilisateur
     {
         return $this->adresse;
     }
-    public function getCodePostal()
-    {
-        return $this->code_postal;
-    }
     public function getPhoto()
     {
         return $this->photo;
@@ -81,7 +75,7 @@ class Utilisateur
 
     public function save(PDO $pdo)   // enregistrer un nouvelle utilisateur dans la bdd 
     {
-        $stmt = $pdo->prepare("INSERT INTO utilisateur (pseudo, nom, prenom, email, password, telephone, adresse, code_postal, photo, credit, role_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO utilisateur (pseudo, nom, prenom, email, password, telephone, adresse, photo, credit, role_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $this->pseudo,
             $this->nom,
@@ -90,7 +84,6 @@ class Utilisateur
             $this->password,
             $this->telephone,
             $this->adresse,
-            $this->code_postal,
             $this->photo,
             $this->credit,
             $this->role_id
@@ -120,7 +113,7 @@ class Utilisateur
     {
         $stmt = $pdo->prepare("
         UPDATE utilisateur SET
-            pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, adresse = ?
+            pseudo = ?, nom = ?, prenom = ?, telephone = ?, adresse = ?
         WHERE id = ?
     ");
 
@@ -128,7 +121,6 @@ class Utilisateur
             $data['pseudo'],
             $data['nom'],
             $data['prenom'],
-            $data['email'],
             $data['telephone'],
             $data['adresse'],
             $id

@@ -35,7 +35,7 @@ class UtilisateurController
             echo json_encode(["error" => "Email déjà utilisé"]);
             return;
         }
-        $data['role_id'] = 3; // rôle utilisateur par défaut 
+        $data['role_id'] = 1; // rôle utilisateur par défaut 
         $utilisateur = new Utilisateur($data);
         $utilisateur->save($this->pdo);
         echo json_encode(["message" => "Utilisateur créé"]);
@@ -62,7 +62,9 @@ class UtilisateurController
         $success = Utilisateur::updateUtilisateur($this->pdo, $id, $data);
 
         if ($success) {
-            echo json_encode(["message" => "Utilisateur modifié"]);
+            $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
+            unset($utilisateur['password']);
+            echo json_encode($utilisateur);
         } else {
             http_response_code(404);
             echo json_encode(["error" => "Utilisateur non trouvé ou non modifié"]);

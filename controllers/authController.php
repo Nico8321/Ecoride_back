@@ -11,9 +11,9 @@ class AuthController
 
     public function __construct()
     {
-        $this->secretKey = getenv('JWT_SECRET');
+        $this->secretKey = $_ENV['JWT_SECRET'] ?? false;
     }
-    public  function  generateJWT($userId,)
+    public  function  generateJWT($userId)
     {
         $issuedAt = time();
         $expiration = $issuedAt + 900;
