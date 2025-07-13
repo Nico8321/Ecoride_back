@@ -15,3 +15,6 @@ if ($method === 'DELETE' && $uri[0] === 'vehicule' && isset($uri[1]) && $uri[2] 
     $data = json_decode(file_get_contents("php://input"), true);
     $controller->deleteVehicule($uri[1], $uri[3]);
 }
+if ($method === 'GET' && $uri[0] === 'vehicule' && $uri[1] === 'user' && isset($uri[2])) {
+    $controller->getVehicule($uri[2]);
+}

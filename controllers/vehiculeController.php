@@ -2,8 +2,9 @@
 require_once __DIR__ . '/../models/vehicule.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/securisationSortie.php';
+require_once __DIR__ . '/../models/utilisateur.php';
 
-class vehiculeController
+class VehiculeController
 {
     private $pdo;
 
@@ -53,7 +54,7 @@ class vehiculeController
             return;
         }
 
-        if ($vehicule["utilisateur_id"] !== $utilisateur_id) {
+        if ($vehicule["utilisateur_id"] != $utilisateur_id) {
             http_response_code(403);
             echo json_encode(["error" => "Suppression non autorisée"]);
             return;
@@ -65,6 +66,20 @@ class vehiculeController
         } else {
             http_response_code(500);
             echo json_encode(["error" => "Erreur lors de la suppression"]);
+        }
+    }
+
+    public function getVehicule($id)
+    {
+        $vehicules = Vehicule::findByUtilisateurId($this->pdo, $id);
+
+        if (!$vehicules) {
+            http_response_code(404);
+            echo json_encode(["error" => "Aucun vehicule  trouvé"]);
+            return;
+        } else {
+
+            echo json_encode(securisationSortie($vehicules));
         }
     }
 }

@@ -90,4 +90,11 @@ class Vehicule
         $stmt->execute([$utilisateur_id]);
         return $stmt->fetchColumn();
     }
+
+    public static function findByUtilisateurId(PDO $pdo, $utilisateur_id)
+    {
+        $stmt = $pdo->prepare("SELECT * FROM vehicule WHERE utilisateur_id = ?");
+        $stmt->execute([$utilisateur_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
