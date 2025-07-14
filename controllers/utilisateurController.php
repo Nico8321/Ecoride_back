@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/utilisateur.php';
+require_once __DIR__ . '/../models/vehicule.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/securisationSortie.php';
 require_once __DIR__ . '/../controllers/authController.php';
@@ -35,7 +36,7 @@ class UtilisateurController
             echo json_encode(["error" => "Email déjà utilisé"]);
             return;
         }
-        $data['role_id'] = 3; // rôle utilisateur par défaut 
+        $data['role_id'] = 1; // rôle utilisateur par défaut 
         $utilisateur = new Utilisateur($data);
         $utilisateur->save($this->pdo);
         echo json_encode(["message" => "Utilisateur créé"]);
@@ -50,6 +51,8 @@ class UtilisateurController
             $auth = new AuthController();
             $token = $auth->generateJWT($utilisateur['id']);
             $utilisateur['token'] = $token;
+            $vehicules = Vehicule::findByUtilisateurId($this->pdo, $utilisateur['id']);
+            $utilisateur['vehicules'] = $vehicules;
             echo json_encode(securisationSortie($utilisateur));
         } else {
             http_response_code(401);
@@ -62,7 +65,9 @@ class UtilisateurController
         $success = Utilisateur::updateUtilisateur($this->pdo, $id, $data);
 
         if ($success) {
-            echo json_encode(["message" => "Utilisateur modifié"]);
+            $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
+            unset($utilisateur['password']);
+            echo json_encode($utilisateur);
         } else {
             http_response_code(404);
             echo json_encode(["error" => "Utilisateur non trouvé ou non modifié"]);

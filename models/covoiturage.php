@@ -131,7 +131,7 @@ class Covoiturage
             longitude_arrivee, date_depart,
             heure_depart,
              nb_places, prix, statut,
-              fumeur, animaux, duree) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)");
+              fumeur, animaux, duree) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $this->conducteurId,
             $this->vehiculeId,

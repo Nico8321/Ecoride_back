@@ -20,6 +20,17 @@ class CovoiturageController
     {
         $covoiturages = Covoiturage::findCovoiturageByUtilisateurId($this->pdo, $id);
         if ($covoiturages) {
+            foreach ($covoiturages as &$covoiturage) {
+                $conducteurId = $covoiturage['conducteur_id'];
+                $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $conducteurId);
+                if ($utilisateur) {
+                    $covoiturage['conducteur_photo'] = $utilisateur['photo']
+                        ?  $utilisateur['photo']
+                        : null;
+                    $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
+                }
+            }
+
             echo json_encode($covoiturages);
         } else {
             echo json_encode([]);
@@ -43,6 +54,8 @@ class CovoiturageController
         $data['villeArrivee'] = $infos['ville'];
         $data['latitudeArrivee'] = $infos['latitude'];
         $data['longitudeArrivee'] = $infos['longitude'];
+        unset($data['arrive']);
+        unset($data['depart']);
         return $data;
     }
 
