@@ -20,7 +20,7 @@ class ReservationController
     public function createReservation($data, $id)
     {
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $id);
-        if ($covoiturage['nb_places'] > $data['nbPlaces']) {
+        if ($covoiturage['nb_places'] > $data['nbplaces']) {
             $data['statut'] = "en attente";
             $reservation = new Reservation($data);
             $reservation->save($this->pdo);

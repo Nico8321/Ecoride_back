@@ -37,7 +37,7 @@ class Reservation
     }
     public function save(PDO $pdo)
     {
-        $stmt = $pdo->prepare("INSERT INTO reservation (utilisateur_id, covoiturage_id, nb_places, statut) VALUES (?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO reservation (utilisateur_id, covoiturage_id, nb_places, statut) VALUES (?, ?, ?, ?)");
         $stmt->execute([
             $this->utilisateurId,
             $this->covoiturageId,

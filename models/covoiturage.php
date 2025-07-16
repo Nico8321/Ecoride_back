@@ -192,10 +192,6 @@ class Covoiturage
             $conditions[] = "prix <= ?";
             $params[] = $filtres['prix'];
         }
-        if (!empty($filtres['note'])) {
-            $conditions[] = "u.note >= ?";
-            $params[] = $filtres['note'];
-        }
         if (!empty($filtres['energie'])) {
             $conditions[] = "vehicule_id IN (SELECT id FROM vehicule WHERE energie = ?)";
             $params[] = $filtres['energie'];
@@ -205,8 +201,8 @@ class Covoiturage
             $params[] = $filtres['duree'];
         }
 
-        $sql = "SELECT c.*, u.note 
-        FROM covoiturage c 
+        $sql = "SELECT c.* 
+         FROM covoiturage c 
         JOIN utilisateur u ON c.conducteur_id = u.id";
 
         if (!empty($conditions)) {

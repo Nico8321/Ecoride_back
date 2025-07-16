@@ -28,6 +28,7 @@ class CovoiturageController
                         ?  $utilisateur['photo']
                         : null;
                     $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
+                    $covoiturage['conducteur_note'] = $utilisateur['note'];
                 }
             }
 
@@ -86,9 +87,10 @@ class CovoiturageController
                 $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $conducteurId);
                 if ($utilisateur) {
                     $covoiturage['conducteur_photo'] = $utilisateur['photo']
-                        ? 'http://localhost/ecoride/uploads/photos/' . $utilisateur['photo']
+                        ?  $utilisateur['photo']
                         : null;
                     $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
+                    $covoiturage['conducteur_note'] = $utilisateur['note'];
                 }
             }
             echo json_encode($covoiturages);

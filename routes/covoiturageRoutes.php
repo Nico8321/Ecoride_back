@@ -19,7 +19,7 @@ if ($method === 'GET' && $uri[0] === 'covoiturage' && count($uri) === 1) {
 
     $filtres = [
         'depart' => $_GET['depart'] ?? null,
-        'arrivee' => $_GET['arrivee '] ?? null,
+        'arrivee' => $_GET['arrivee'] ?? null,
         'date' => $_GET['date'] ?? null,
         'heure' => $_GET['heure'] ?? null,
         'prix' => $_GET['prix'] ?? null,

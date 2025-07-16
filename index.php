@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 require_once __DIR__ . '/config/database.php';
 
-$uri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+$uri = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
 $base = $uri[0] ?? '';
 
 switch ($base) {
