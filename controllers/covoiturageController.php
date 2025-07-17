@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../models/covoiturage.php';
 require_once __DIR__ . '/../models/utilisateur.php';
+require_once __DIR__ . '/../models/vehicule.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/apiAdresse.php';
 require_once __DIR__ . '/../utils/apiOsrm.php';
@@ -29,6 +30,15 @@ class CovoiturageController
                         : null;
                     $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
                     $covoiturage['conducteur_note'] = $utilisateur['note'];
+                }
+                $vehiculeId = $covoiturage['vehicule_id'];
+                $vehicule = Vehicule::findById($this->pdo, $vehiculeId);
+                if ($vehicule) {
+
+                    $covoiturage['vehicule_marque'] = $vehicule['marque'];
+                    $covoiturage['vehicule_modele'] = $vehicule['modele'];
+                    $covoiturage['vehicule_couleur'] = $vehicule['couleur'];
+                    $covoiturage['vehicule_energie'] = $vehicule['energie'];
                 }
             }
 
@@ -91,6 +101,15 @@ class CovoiturageController
                         : null;
                     $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
                     $covoiturage['conducteur_note'] = $utilisateur['note'];
+                }
+                $vehiculeId = $covoiturage['vehicule_id'];
+                $vehicule = Vehicule::findById($this->pdo, $vehiculeId);
+                if ($vehicule) {
+
+                    $covoiturage['vehicule_marque'] = $vehicule['marque'];
+                    $covoiturage['vehicule_modele'] = $vehicule['modele'];
+                    $covoiturage['vehicule_couleur'] = $vehicule['couleur'];
+                    $covoiturage['vehicule_energie'] = $vehicule['energie'];
                 }
             }
             echo json_encode($covoiturages);
