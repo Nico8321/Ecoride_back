@@ -36,6 +36,12 @@ switch ($base) {
     case 'vehicule':
         require_once __DIR__ . '/routes/vehiculeRoutes.php';
         break;
+    case 'avis':
+        require_once __DIR__ . '/routes/avisRoutes.php';
+        break;
+    case 'avis-moyenne':
+        require_once __DIR__ . '/routes/avisRoutes.php';
+        break;
     default:
         http_response_code(404);
         echo json_encode(['error' => 'Route inconnue']);
