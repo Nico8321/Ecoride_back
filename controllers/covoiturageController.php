@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../models/covoiturage.php';
 require_once __DIR__ . '/../models/utilisateur.php';
 require_once __DIR__ . '/../models/vehicule.php';
+require_once __DIR__ . '/../models/avis.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/apiAdresse.php';
 require_once __DIR__ . '/../utils/apiOsrm.php';
@@ -29,7 +30,8 @@ class CovoiturageController
                         ?  $utilisateur['photo']
                         : null;
                     $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
-                    $covoiturage['conducteur_note'] = $utilisateur['note'];
+                    $avis = Avis::getMoyenneByUtilisateurId($this->pdo, $conducteurId);
+                    $covoiturage['conducteur_note'] = $avis;
                 }
                 $vehiculeId = $covoiturage['vehicule_id'];
                 $vehicule = Vehicule::findById($this->pdo, $vehiculeId);
@@ -100,7 +102,8 @@ class CovoiturageController
                         ?  $utilisateur['photo']
                         : null;
                     $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
-                    $covoiturage['conducteur_note'] = $utilisateur['note'];
+                    $avis = Avis::getMoyenneByUtilisateurId($this->pdo, $conducteurId);
+                    $covoiturage['conducteur_note'] = $avis;
                 }
                 $vehiculeId = $covoiturage['vehicule_id'];
                 $vehicule = Vehicule::findById($this->pdo, $vehiculeId);

@@ -51,4 +51,10 @@ class Reservation
         $stmt->execute([$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public static function getByCovoiturageId(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("SELECT * FROM reservation WHERE covoiturage_id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

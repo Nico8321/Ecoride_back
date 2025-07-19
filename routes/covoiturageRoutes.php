@@ -15,7 +15,7 @@ if ($method === 'GET' && $uri[0] === "covoiturage" && $uri[1] === 'user' && isse
     $controller->getByConducteurId($uri[2]);
 }
 
-if ($method === 'GET' && $uri[0] === 'covoiturage' && count($uri) === 1) {
+if ($method === 'GET' && $uri[0] === 'covoiturages' && count($uri) === 1) {
 
     $filtres = [
         'depart' => $_GET['depart'] ?? null,
