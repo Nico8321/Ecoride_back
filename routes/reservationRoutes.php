@@ -14,3 +14,6 @@ if ($method === 'POST' && $uri[0] === 'reservation' && $uri[1] === 'covoiturage'
 if ($method === 'GET' && $uri[0] === 'reservation' && $uri[1] === 'utilisateur' && isset($uri[2])) {
     $controller->getReservationByUser($uri[2]);
 }
+if ($method === 'GET' && $uri[0] === 'reservations' && isset($uri[1])) {
+    $controller->getReservationByCovoiturageId($uri[1]);
+}

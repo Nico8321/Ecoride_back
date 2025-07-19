@@ -36,6 +36,9 @@ switch ($base) {
     case 'reservation':
         require_once __DIR__ . '/routes/reservationRoutes.php';
         break;
+    case 'reservations':
+        require_once __DIR__ . '/routes/reservationRoutes.php';
+        break;
     case 'vehicule':
         require_once __DIR__ . '/routes/vehiculeRoutes.php';
         break;

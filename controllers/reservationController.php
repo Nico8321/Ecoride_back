@@ -72,4 +72,19 @@ class ReservationController
             echo json_encode(securisationSortie($reservations));
         }
     }
+    public function getReservationByCovoiturageId($id)
+    {
+        $reservations = Reservation::getByCovoiturageId($this->pdo, $id);
+
+        foreach ($reservations as &$reservation) {
+            $id = $reservation['utilisateur_id'];
+            $utilisateur = Utilisateur::findUtilisateurById($this->pdo,  $id);
+            if ($utilisateur) {
+                $reservation["utilisateur_pseudo"] = $utilisateur["pseudo"];
+                $reservation['utilisateur_photo'] = $utilisateur['photo'];
+            }
+        }
+
+        echo json_encode(securisationSortie($reservations));
+    }
 }
