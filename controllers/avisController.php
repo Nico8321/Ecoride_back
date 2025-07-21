@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/avis.php';
-
+require_once __DIR__ . '/../models/utilisateur.php';
 
 class AvisController
 {
@@ -22,9 +22,22 @@ class AvisController
 
     public function getAvisByCovoiturageId($id)
     {
-        $avis = Avis::findByCovoiturageId($this->pdo, $id);
-        echo json_encode($avis);
+        $listAvis = Avis::findByCovoiturageId($this->pdo, $id);
+        if ($listAvis) {
+            foreach ($listAvis as &$avis) {
+                $utilisateurId = $avis['auteur_id'];
+                $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $utilisateurId);
+                if ($utilisateur) {
+                    $avis['auteur_photo'] = $utilisateur['photo']
+                        ?  $utilisateur['photo']
+                        : null;
+                    $avis['auteur_pseudo'] = $utilisateur['pseudo'];
+                }
+                echo json_encode($avis);
+            }
+        }
     }
+
 
     public function getMoyenneByUtilisateurId($id)
     {
