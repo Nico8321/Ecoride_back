@@ -20,6 +20,12 @@ class AvisController
         echo json_encode($avis);
     }
 
+    public function getAvisByCovoiturageId($id)
+    {
+        $avis = Avis::findByCovoiturageId($this->pdo, $id);
+        echo json_encode($avis);
+    }
+
     public function getMoyenneByUtilisateurId($id)
     {
         $moyenne = Avis::getMoyenneByUtilisateurId($this->pdo, $id);
@@ -30,6 +36,7 @@ class AvisController
     {
         $result = Avis::create(
             $this->pdo,
+            $data['covoiturage_id'],
             $data['auteur_id'],
             $data['conducteur_id'],
             $data['note'],
