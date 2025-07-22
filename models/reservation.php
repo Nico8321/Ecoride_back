@@ -57,4 +57,15 @@ class Reservation
         $stmt->execute([$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public static function deleteReservationById(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        DELETE FROM reservation WHERE id = ?
+    ");
+
+        return $stmt->execute([
+            $id
+        ]);
+    }
 }
