@@ -68,4 +68,16 @@ class Reservation
             $id
         ]);
     }
+    public static function setStatutReservation(PDO $pdo, $id, $statut)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE reservation SET
+            statut = ?
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $statut,
+            $id
+        ]);
+    }
 }
