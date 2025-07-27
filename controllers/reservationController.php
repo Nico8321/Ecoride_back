@@ -96,4 +96,15 @@ class ReservationController
             echo json_encode(["error" => "Reservation introuvable"]);
         }
     }
+
+    public function changeStatutReservation($id, $statut)
+    {
+        $reservation = reservation::setStatutReservation($this->pdo, $id, $statut);
+        if ($reservation) {
+            echo json_encode(["message" => "Reservation $statut"]);
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "Reservation introuvable"]);
+        }
+    }
 }

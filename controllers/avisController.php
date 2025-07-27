@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../models/avis.php';
 require_once __DIR__ . '/../models/utilisateur.php';
+require_once __DIR__ . '/../utils/securisationSortie.php';
 
 class AvisController
 {
@@ -33,7 +34,7 @@ class AvisController
                         : null;
                     $avis['auteur_pseudo'] = $utilisateur['pseudo'];
                 }
-                echo json_encode($avis);
+                echo json_encode(securisationSortie($avis));
             }
         }
     }
