@@ -52,7 +52,6 @@ class ReservationController
                         $covoiturage['conducteur_pseudo'] = $conducteur['pseudo'];
                         $avis = Avis::getMoyenneByUtilisateurId($this->pdo, $covoiturage['conducteur_id']);
                         $covoiturage['conducteur_note'] = $avis;
-                        // $covoiturage['conducteur_note'] = $conducteur['note'];
                     }
 
                     // Enrichir avec véhicule
@@ -86,5 +85,15 @@ class ReservationController
         }
 
         echo json_encode(securisationSortie($reservations));
+    }
+    public function deleteReservation($id)
+    {
+        $reservation = reservation::deleteReservationById($this->pdo, $id);
+        if ($reservation) {
+            echo json_encode(["message" => "Reservation supprimée"]);
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "Reservation introuvable"]);
+        }
     }
 }

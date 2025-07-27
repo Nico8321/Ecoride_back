@@ -17,3 +17,6 @@ if ($method === 'GET' && $uri[0] === 'reservation' && $uri[1] === 'utilisateur' 
 if ($method === 'GET' && $uri[0] === 'reservations' && isset($uri[1])) {
     $controller->getReservationByCovoiturageId($uri[1]);
 }
+if ($method === 'DELETE' && $uri[0] === 'reservation' && $uri[1] === 'delete' && isset($uri[2])) {
+    $controller->deleteReservation($uri[2]);
+}
