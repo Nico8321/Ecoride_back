@@ -24,13 +24,29 @@ class ReservationController
     {
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $id);
         if ($covoiturage['nb_places'] > $data['nbplaces']) {
-            $data['statut'] = "en attente";
-            $reservation = new Reservation($data);
-            $reservation->save($this->pdo);
-            echo json_encode(["message" => "Reservation enregistrée"]);
+            $prix = $covoiturage['prix'] * $data["nbplaces"];
+            $verification = Utilisateur::checkCredit($this->pdo, $data['utilisateur_id'], $prix);
+            if (!$verification) {
+                http_response_code(403);
+                echo json_encode(["error" => "Credits insufisant"]);
+                return;
+            }
+            $succes = Utilisateur::removeCreditUtilisateur($this->pdo, $data['utilisateur_id'], $prix);
+            if ($succes) {
+
+                $data['statut'] = "en attente";
+                $reservation = new Reservation($data);
+                $reservation->save($this->pdo);
+                echo json_encode(["message" => "Reservation enregistrée"]);
+            } else {
+                http_response_code(500);
+                echo json_encode(["error" => "Probleme lors du debit des credits"]);
+                return;
+            }
         } else {
             http_response_code(403);
             echo json_encode(["error" => "Nombre de place disponibles insufisantes"]);
+            return;
         }
     }
     public function getReservationByUser($id)

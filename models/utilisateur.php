@@ -154,4 +154,37 @@ class Utilisateur
         $stmt = $pdo->prepare("UPDATE utilisateur SET photo = ? WHERE id = ?");
         return $stmt->execute([$filename, $id]);
     }
+
+    public static function addCreditUtilisateur(PDO $pdo, $id, $credit)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE utilisateur SET
+            credit = credit + ?
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $credit,
+            $id
+        ]);
+    }
+    public static function removeCreditUtilisateur(PDO $pdo, $id, $prix)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE utilisateur SET
+            credit = credit - ?
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $prix,
+            $id
+        ]);
+    }
+    public static function checkCredit(PDO $pdo, $id, $prix)
+    {
+        $stmt = $pdo->prepare("SELECT credit FROM utilisateur WHERE id = ?");
+        $stmt->execute([$id]);
+        $credit = $stmt->fetchColumn();
+
+        return $credit !== false && $credit >= $prix;
+    }
 }
