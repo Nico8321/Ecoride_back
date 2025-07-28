@@ -88,7 +88,7 @@ class ReservationController
     }
     public function deleteReservation($id)
     {
-        $reservation = reservation::deleteReservationById($this->pdo, $id);
+        $reservation = Reservation::deleteReservationById($this->pdo, $id);
         if ($reservation) {
             echo json_encode(["message" => "Reservation supprimée"]);
         } else {
@@ -97,11 +97,21 @@ class ReservationController
         }
     }
 
-    public function changeStatutReservation($id, $statut)
+    public function comfirmeReservation($id)
     {
-        $reservation = reservation::setStatutReservation($this->pdo, $id, $statut);
+        $reservation = Reservation::accepterReservation($this->pdo, $id);
         if ($reservation) {
-            echo json_encode(["message" => "Reservation $statut"]);
+            echo json_encode(["message" => "Reservation acceptée"]);
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "Reservation introuvable"]);
+        }
+    }
+    public function refuseReservation($id)
+    {
+        $reservation = Reservation::refuserReservation($this->pdo, $id);
+        if ($reservation) {
+            echo json_encode(["message" => "Reservation refusée"]);
         } else {
             http_response_code(404);
             echo json_encode(["error" => "Reservation introuvable"]);
