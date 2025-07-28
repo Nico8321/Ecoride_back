@@ -213,4 +213,13 @@ class Covoiturage
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public static function annulerCovoiturage(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("UPDATE covoiturage SET statut = 'annule' WHERE id = ?");
+        $success = $stmt->execute([$id]);
+        $rowCount = $stmt->rowCount();
+        error_log("Annulation covoiturage : success = " . var_export($success, true) . ", rows affected = $rowCount");
+        return $rowCount > 0;
+    }
 }

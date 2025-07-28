@@ -118,4 +118,27 @@ class CovoiturageController
             echo json_encode($covoiturages);
         }
     }
+    public function deleteCovoiturage($userId, $covoiturageId)
+    {
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $covoiturageId);
+        if (!$covoiturage) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        if ($covoiturage['conducteur_id'] == $userId) {
+            $succes = Covoiturage::annulerCovoiturage($this->pdo, $covoiturageId);
+            if ($succes) {
+                echo json_encode(["message" => "Covoiturage annulé"]);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Covoiturage non trouvé ou non modifié"]);
+                return;
+            }
+        } else {
+            http_response_code(403);
+            echo json_encode(["error" => " Action interdite "]);
+        }
+    }
 }
