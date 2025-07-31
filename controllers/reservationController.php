@@ -23,15 +23,15 @@ class ReservationController
     public function createReservation($data, $id)
     {
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $id);
-        if ($covoiturage['nb_places'] > $data['nbplaces']) {
-            $prix = $covoiturage['prix'] * $data["nbplaces"];
-            $verification = Utilisateur::checkCredit($this->pdo, $data['utilisateur_id'], $prix);
+        if ($covoiturage['nb_places'] > $data['nbPlaces']) {
+            $prix = $covoiturage['prix'] * $data['nbPlaces'];
+            $verification = Utilisateur::checkCredit($this->pdo, $data['utilisateurId'], $prix);
             if (!$verification) {
                 http_response_code(403);
                 echo json_encode(["error" => "Credits insuffisants"]);
                 return;
             }
-            $succes = Utilisateur::removeCreditUtilisateur($this->pdo, $data['utilisateur_id'], $prix);
+            $succes = Utilisateur::removeCreditUtilisateur($this->pdo, $data['utilisateurId'], $prix);
             if ($succes) {
 
                 $data['statut'] = "en attente";

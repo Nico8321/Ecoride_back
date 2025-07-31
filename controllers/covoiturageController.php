@@ -6,6 +6,7 @@ require_once __DIR__ . '/../models/avis.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/apiAdresse.php';
 require_once __DIR__ . '/../utils/apiOsrm.php';
+require_once __DIR__ . '/../controllers/reservationController.php';
 
 class CovoiturageController
 {
@@ -126,6 +127,14 @@ class CovoiturageController
             echo json_encode(["error" => "Covoiturage introuvable"]);
             return;
         }
+        $reservations = Reservation::getByCovoiturageId($this->pdo, $covoiturageId);
+        if ($reservations) {
+            $controller = new ReservationController();
+            foreach ($reservations as &$reservation) {
+                if ($reservation['statut'] == 'confirme')
+                    $controller->refuseReservation($reservation['id']);
+            }
+        };
         if ($covoiturage['conducteur_id'] == $userId) {
             $succes = Covoiturage::annulerCovoiturage($this->pdo, $covoiturageId);
             if ($succes) {
