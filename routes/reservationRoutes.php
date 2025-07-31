@@ -21,7 +21,7 @@ if ($method === 'DELETE' && $uri[0] === 'reservation' && $uri[1] === 'delete' &&
     $controller->deleteReservation($uri[2]);
 }
 if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'accepte' && isset($uri[2])) {
-    $controller->comfirmeReservation($uri[2], $uri[3]);
+    $controller->confirmeReservation($uri[2], $uri[3]);
 }
 if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'refuse' && isset($uri[2])) {
     $controller->refuseReservation($uri[2], $uri[3]);
