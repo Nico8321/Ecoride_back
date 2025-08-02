@@ -155,18 +155,21 @@ class Covoiturage
             $this->duree
         ]);
     }
+
     public static function findCovoiturageByUtilisateurId(PDO $pdo, $id)
     {
         $stmt = $pdo->prepare("SELECT * FROM covoiturage WHERE conducteur_id = ?");
         $stmt->execute([$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public static function findCovoiturageById(PDO $pdo, $id)
     {
         $stmt = $pdo->prepare("SELECT * FROM covoiturage WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
     public static function findCovoiturageByFilter(PDO $pdo, $filtres)
     {
         $conditions = [];
@@ -221,5 +224,31 @@ class Covoiturage
         $rowCount = $stmt->rowCount();
         error_log("Annulation covoiturage : success = " . var_export($success, true) . ", rows affected = $rowCount");
         return $rowCount > 0;
+    }
+
+    public static function addPlaces(PDO $pdo, $id, $places)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE covoiturage SET
+            nb_places = nb_places + ?
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $places,
+            $id
+        ]);
+    }
+
+    public static function removePlaces(PDO $pdo, $id, $places)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE covoiturage SET
+        nb_places =  nb_places - ?
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $places,
+            $id
+        ]);
     }
 }

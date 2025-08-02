@@ -23,14 +23,30 @@ class ReservationController
     public function createReservation($data, $id)
     {
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $id);
-        if ($covoiturage['nb_places'] > $data['nbplaces']) {
-            $data['statut'] = "en attente";
-            $reservation = new Reservation($data);
-            $reservation->save($this->pdo);
-            echo json_encode(["message" => "Reservation enregistrée"]);
+        if ($covoiturage['nb_places'] > $data['nbPlaces']) {
+            $prix = $covoiturage['prix'] * $data['nbPlaces'];
+            $verification = Utilisateur::checkCredit($this->pdo, $data['utilisateurId'], $prix);
+            if (!$verification) {
+                http_response_code(403);
+                echo json_encode(["error" => "Credits insuffisants"]);
+                return;
+            }
+            $succes = Utilisateur::removeCreditUtilisateur($this->pdo, $data['utilisateurId'], $prix);
+            if ($succes) {
+
+                $data['statut'] = "en attente";
+                $reservation = new Reservation($data);
+                $reservation->save($this->pdo);
+                echo json_encode(["message" => "Reservation enregistrée"]);
+            } else {
+                http_response_code(500);
+                echo json_encode(["error" => "Probleme lors du debit des credits"]);
+                return;
+            }
         } else {
             http_response_code(403);
-            echo json_encode(["error" => "Nombre de place disponibles insufisantes"]);
+            echo json_encode(["error" => "Nombre de place disponibles insuffisantes"]);
+            return;
         }
     }
     public function getReservationByUser($id)
@@ -97,24 +113,66 @@ class ReservationController
         }
     }
 
-    public function comfirmeReservation($id)
+    public function confirmeReservation($id)
     {
-        $reservation = Reservation::accepterReservation($this->pdo, $id);
-        if ($reservation) {
-            echo json_encode(["message" => "Reservation acceptée"]);
-        } else {
+        $reservation = Reservation::getReservationById($this->pdo, $id);
+        if (!$reservation) {
             http_response_code(404);
             echo json_encode(["error" => "Reservation introuvable"]);
+            return;
         }
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $reservation['covoiturage_id']);
+        if (!$covoiturage) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        $majNbPlaces = Covoiturage::removePlaces($this->pdo, $covoiturage['id'], $reservation['nb_places']);
+        if (!$majNbPlaces) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors de la mise a jour des places libres"]);
+            return;
+        }
+        $succes = Reservation::accepterReservation($this->pdo, $id);
+        if (!$succes) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors de l'acceptation de la réservation"]);
+            return;
+        }
+        echo json_encode(["message" => "Reservation acceptée"]);
     }
+
     public function refuseReservation($id)
     {
-        $reservation = Reservation::refuserReservation($this->pdo, $id);
-        if ($reservation) {
-            echo json_encode(["message" => "Reservation refusée"]);
-        } else {
+        $reservation = Reservation::getReservationById($this->pdo, $id);
+        if (!$reservation) {
             http_response_code(404);
             echo json_encode(["error" => "Reservation introuvable"]);
+            return;
         }
+
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $reservation['covoiturage_id']);
+        if (!$covoiturage) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+
+        $montant = $covoiturage['prix'] * $reservation['nb_places'];
+        $remboursement = Utilisateur::addCreditUtilisateur($this->pdo, $reservation['utilisateur_id'], $montant);
+        if (!$remboursement) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors du remboursement des crédits"]);
+            return;
+        }
+
+        $refuser = Reservation::refuserReservation($this->pdo, $id);
+        if (!$refuser) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors du refus de la réservation"]);
+            return;
+        }
+
+        echo json_encode(["message" => "Reservation refusée"]);
     }
 }

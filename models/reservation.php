@@ -51,6 +51,12 @@ class Reservation
         $stmt->execute([$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public static function getReservationById(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("SELECT * FROM reservation WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     public static function getByCovoiturageId(PDO $pdo, $id)
     {
         $stmt = $pdo->prepare("SELECT * FROM reservation WHERE covoiturage_id = ?");
@@ -72,7 +78,7 @@ class Reservation
     {
         $stmt = $pdo->prepare("
         UPDATE reservation SET
-            statut = 'comfirme'
+            statut = 'confirme'
         WHERE id = ?
     ");
         return $stmt->execute([
