@@ -200,7 +200,7 @@ class Covoiturage
             $params[] = $filtres['energie'];
         }
         if (!empty($filtres['duree'])) {
-            $conditions[] = "duree >= ?";
+            $conditions[] = "duree <= ?";
             $params[] = $filtres['duree'];
         }
 
