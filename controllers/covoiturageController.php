@@ -150,4 +150,50 @@ class CovoiturageController
             echo json_encode(["error" => " Action interdite "]);
         }
     }
+    public function demarrerCovoiturage($userId, $covoiturageId)
+    {
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $covoiturageId);
+        if (!$covoiturage) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        if ($covoiturage['conducteur_id'] == $userId) {
+            $succes = Covoiturage::changeStatutCovoiturage($this->pdo, $covoiturageId, 'demarre');
+            if ($succes) {
+                echo json_encode(["message" => "Covoiturage demarré"]);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Covoiturage non trouvé ou non modifié"]);
+                return;
+            }
+        } else {
+            http_response_code(403);
+            echo json_encode(["error" => " Action interdite "]);
+        }
+    }
+    public function terminerCovoiturage($userId, $covoiturageId)
+    {
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $covoiturageId);
+        if (!$covoiturage) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        if ($covoiturage['conducteur_id'] == $userId) {
+            $succes = Covoiturage::changeStatutCovoiturage($this->pdo, $covoiturageId, 'termine');
+            if ($succes) {
+                echo json_encode(["message" => "Covoiturage terminé"]);
+                return;
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Covoiturage non trouvé ou non modifié"]);
+                return;
+            }
+        } else {
+            http_response_code(403);
+            echo json_encode(["error" => " Action interdite "]);
+        }
+    }
 }

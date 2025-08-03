@@ -225,6 +225,11 @@ class Covoiturage
         error_log("Annulation covoiturage : success = " . var_export($success, true) . ", rows affected = $rowCount");
         return $rowCount > 0;
     }
+    public static function changeStatutCovoiturage(PDO $pdo, $id, $statut)
+    {
+        $stmt = $pdo->prepare("UPDATE covoiturage SET statut = ? WHERE id = ?");
+        return $stmt->execute([$statut, $id]);
+    }
 
     public static function addPlaces(PDO $pdo, $id, $places)
     {

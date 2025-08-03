@@ -34,10 +34,11 @@ class AvisController
                         : null;
                     $avis['auteur_pseudo'] = $utilisateur['pseudo'];
                 }
-                echo json_encode(securisationSortie($avis));
             }
         }
+        echo json_encode(securisationSortie($listAvis));
     }
+
 
 
     public function getMoyenneByUtilisateurId($id)
