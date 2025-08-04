@@ -26,14 +26,14 @@ class Mail
         $this->mail->Port       = 587;
         $this->mail->setFrom($_ENV['EMAIL'], 'EcoRide');
     }
-    public function envoyer($toEmail, $toName, $sujet, $contenuHtml)
+    public  function envoyer($toEmail, $toName, $sujet, $contenu)
     {
         try {
             $this->mail->clearAddresses();
             $this->mail->addAddress($toEmail, $toName);
             $this->mail->isHTML(true);
-            $this->mail->Subject = $sujet;
-            $this->mail->Body = $contenuHtml;
+            $this->mail->Subject = trim($sujet);;
+            $this->mail->Body = $contenu;
             $this->mail->send();
             return true;
         } catch (Exception $e) {
