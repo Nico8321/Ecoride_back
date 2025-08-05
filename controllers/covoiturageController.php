@@ -45,7 +45,7 @@ class CovoiturageController
                 }
             }
 
-            echo json_encode($covoiturages);
+            echo json_encode(securisationSortie($covoiturages));
         } else {
             echo json_encode([]);
         }
@@ -81,6 +81,7 @@ class CovoiturageController
         $covoiturage->save($this->pdo);
 
         echo json_encode(["message" => "Covoiturage créé"]);
+        return;
     }
     public function addDureeTrajet($data)
     {
@@ -94,6 +95,7 @@ class CovoiturageController
         if (!$covoiturages) {
             http_response_code(404);
             echo json_encode(["error" => "Aucun covoiturage trouvé"]);
+            return;
         } else {
             foreach ($covoiturages as &$covoiturage) {
                 $conducteurId = $covoiturage['conducteur_id'];
@@ -116,7 +118,8 @@ class CovoiturageController
                     $covoiturage['vehicule_energie'] = $vehicule['energie'];
                 }
             }
-            echo json_encode($covoiturages);
+            echo json_encode(securisationSortie($covoiturages));
+            return;
         }
     }
     public function deleteCovoiturage($userId, $covoiturageId)
@@ -138,6 +141,7 @@ class CovoiturageController
         if ($covoiturage['conducteur_id'] == $userId) {
             $succes = Covoiturage::annulerCovoiturage($this->pdo, $covoiturageId);
             if ($succes) {
+                http_response_code(200);
                 echo json_encode(["message" => "Covoiturage annulé"]);
                 return;
             } else {
@@ -147,7 +151,8 @@ class CovoiturageController
             }
         } else {
             http_response_code(403);
-            echo json_encode(["error" => " Action interdite "]);
+            echo json_encode(["error" => "Action interdite"]);
+            return;
         }
     }
     public function demarrerCovoiturage($userId, $covoiturageId)
@@ -161,6 +166,7 @@ class CovoiturageController
         if ($covoiturage['conducteur_id'] == $userId) {
             $succes = Covoiturage::changeStatutCovoiturage($this->pdo, $covoiturageId, 'demarre');
             if ($succes) {
+                http_response_code(200);
                 echo json_encode(["message" => "Covoiturage demarré"]);
                 return;
             } else {
@@ -170,7 +176,8 @@ class CovoiturageController
             }
         } else {
             http_response_code(403);
-            echo json_encode(["error" => " Action interdite "]);
+            echo json_encode(["error" => "Action interdite"]);
+            return;
         }
     }
     public function terminerCovoiturage($userId, $covoiturageId)
@@ -184,6 +191,7 @@ class CovoiturageController
         if ($covoiturage['conducteur_id'] == $userId) {
             $succes = Covoiturage::changeStatutCovoiturage($this->pdo, $covoiturageId, 'termine');
             if ($succes) {
+                http_response_code(200);
                 echo json_encode(["message" => "Covoiturage terminé"]);
                 return;
             } else {
@@ -193,7 +201,8 @@ class CovoiturageController
             }
         } else {
             http_response_code(403);
-            echo json_encode(["error" => " Action interdite "]);
+            echo json_encode(["error" => "Action interdite"]);
+            return;
         }
     }
 }
