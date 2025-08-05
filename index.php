@@ -6,11 +6,16 @@ if (file_exists(__DIR__)) {
     $dotenv->load();
 }
 // CORS
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: https://ecoride-front-w7vl.vercel.app');
 header('Access-Control-Allow-Methods: GET, POST, PUT,PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 // Gérer les requêtes préflight CORS
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
