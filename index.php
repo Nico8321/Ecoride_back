@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 if (file_exists(__DIR__ . '/.env')) {
-    Dotenv\Dotenv::createImmutable(__DIR__)->load();
+    Dotenv\Dotenv::createImmutable(__DIR__)->safeLoad();
 }
 
 
