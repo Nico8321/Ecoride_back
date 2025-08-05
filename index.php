@@ -1,8 +1,10 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '');
-$dotenv->load();
+if (file_exists(__DIR__)) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+}
 // CORS
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT,PATCH, DELETE, OPTIONS');
