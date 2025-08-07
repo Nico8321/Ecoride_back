@@ -96,4 +96,15 @@ class Reservation
             $id
         ]);
     }
+    public static function AwaitingFeedback(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE reservation SET
+            statut = 'retour client'
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
 }

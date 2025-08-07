@@ -164,7 +164,7 @@ class ReservationController
         $user = Utilisateur::findUtilisateurById($this->pdo, $reservation['utilisateur_id']);
         $dateDepart = $covoiturage['date_depart'];
         $mailController = new MailController();
-        $notification = $mailController->envoyerAcceptation($user['pseudo'], $user['email'], $dateDepart);
+        $notification = $mailController->envoyerAcceptation($user['pseudo'], $user['email']);
         if (!$notification) {
             http_response_code(500);
             echo json_encode(["error" => "Erreur lors de l'envoi du mail de confirmation"]);
@@ -207,13 +207,46 @@ class ReservationController
         $user = Utilisateur::findUtilisateurById($this->pdo, $reservation['utilisateur_id']);
         $dateDepart = $covoiturage['date_depart'];
         $mailController = new MailController();
-        $notification = $mailController->envoyerRefus($user['pseudo'], $user['email'], $dateDepart);
+        $notification = $mailController->envoyerRefus($user['pseudo'], $user['email']);
         if (!$notification) {
             http_response_code(500);
             echo json_encode(["error" => "Erreur lors de l'envoi du mail de refus"]);
             return;
         }
         echo json_encode(["message" => "Reservation refusée"]);
+        return;
+    }
+    public function feedbackReservation($id)
+    {
+        $reservation = Reservation::getReservationById($this->pdo, $id);
+        if (!$reservation) {
+            http_response_code(404);
+            echo json_encode(["error" => "Reservation introuvable"]);
+            return;
+        }
+
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $reservation['covoiturage_id']);
+        if (!$covoiturage) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+
+        $feedback = Reservation::AwaitingFeedback($this->pdo, $id);
+        if (!$feedback) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors de la demande de retour client"]);
+            return;
+        }
+        $user = Utilisateur::findUtilisateurById($this->pdo, $reservation['utilisateur_id']);
+        $mailController = new MailController();
+        $notification = $mailController->envoyerFeedback($user['pseudo'], $user['email']);
+        if (!$notification) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors de l'envoi du mail de retour client"]);
+            return;
+        }
+        echo json_encode(["message" => "En attente du retour client"]);
         return;
     }
 }
