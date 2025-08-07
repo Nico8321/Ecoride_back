@@ -23,7 +23,7 @@ class ReservationController
     public function createReservation($data, $id)
     {
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $id);
-        if ($covoiturage['nb_places'] > $data['nbPlaces']) {
+        if ($covoiturage['nb_places'] >= $data['nbPlaces']) {
             $prix = $covoiturage['prix'] * $data['nbPlaces'];
             $verification = Utilisateur::checkCredit($this->pdo, $data['utilisateurId'], $prix);
             if (!$verification) {
@@ -135,7 +135,7 @@ class ReservationController
         }
     }
 
-    public function confirmeReservation($id)
+    public function confirmeReservation($id, $userId)
     {
         $reservation = Reservation::getReservationById($this->pdo, $id);
         if (!$reservation) {
@@ -147,6 +147,11 @@ class ReservationController
         if (!$covoiturage) {
             http_response_code(404);
             echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        if ($covoiturage['conducteur_id'] != $userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Action impossible vous ne disposez pas des droits necessaires"]);
             return;
         }
         $majNbPlaces = Covoiturage::removePlaces($this->pdo, $covoiturage['id'], $reservation['nb_places']);
@@ -174,7 +179,7 @@ class ReservationController
         return;
     }
 
-    public function refuseReservation($id)
+    public function refuseReservation($id, $userId)
     {
         $reservation = Reservation::getReservationById($this->pdo, $id);
         if (!$reservation) {
@@ -187,6 +192,11 @@ class ReservationController
         if (!$covoiturage) {
             http_response_code(404);
             echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        if ($covoiturage['conducteur_id'] != $userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Action impossible vous ne disposez pas des droits necessaires"]);
             return;
         }
 
@@ -247,6 +257,48 @@ class ReservationController
             return;
         }
         echo json_encode(["message" => "En attente du retour client"]);
+        return;
+    }
+    public function terminerReservation($id, $userId)
+    {
+        $reservation = Reservation::getReservationById($this->pdo, $id);
+        if (!$reservation) {
+            http_response_code(404);
+            echo json_encode(["error" => "Reservation introuvable"]);
+            return;
+        }
+        if ($reservation['utilisateur_id'] != $userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Action impossible vous ne disposez pas des droits necessaires"]);
+            return;
+        }
+        $termine = Reservation::terminerReservation($this->pdo, $id);
+        if (!$termine) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors du changement de statut de la réservation "]);
+            return;
+        }
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $reservation['covoiturage_id']);
+        if (!$covoiturage) {
+            http_response_code(500);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        if ($covoiturage['statut'] != 'termine') {
+            http_response_code(403);
+            echo json_encode(["error" => "Veuillez attendre la fin du covoiturage pour terminer la réservation "]);
+            return;
+        }
+
+        $montantConducteur = $covoiturage['prix'] - 2 * $reservation['nb_places'];
+        $paiementUtilisateur = Utilisateur::addCreditUtilisateur($this->pdo, $covoiturage['conducteur_id'], $montantConducteur);
+        if (!$paiementUtilisateur) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors du paiement du conducteur"]);
+            return;
+        }
+        http_response_code(200);
+        echo json_encode(["message" => " Votre réservation est maintenant terminée , le paiement au conducteur a bien été effectué "]);
         return;
     }
 }
