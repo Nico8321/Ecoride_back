@@ -191,7 +191,7 @@ class CovoiturageController
         }
 
         // Vérifier que c'est bien le conducteur
-        if ($covoiturage['conducteur_id'] !== $userId) {
+        if ($covoiturage['conducteur_id'] != $userId) {
             http_response_code(403);
             echo json_encode(["error" => "Action interdite"]);
             return;
