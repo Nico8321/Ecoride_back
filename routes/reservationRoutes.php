@@ -20,9 +20,12 @@ if ($method === 'GET' && $uri[0] === 'reservations' && isset($uri[1])) {
 if ($method === 'DELETE' && $uri[0] === 'reservation' && $uri[1] === 'delete' && isset($uri[2])) {
     $controller->deleteReservation($uri[2]);
 }
-if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'accepte' && isset($uri[2])) {
+if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'accepte' && isset($uri[2]) && isset($uri[3])) {
     $controller->confirmeReservation($uri[2], $uri[3]);
 }
-if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'refuse' && isset($uri[2])) {
+if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'refuse' && isset($uri[2]) && isset($uri[3])) {
     $controller->refuseReservation($uri[2], $uri[3]);
+}
+if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'termine' && isset($uri[2]) && isset($uri[3])) {
+    $controller->terminerReservation($uri[2], $uri[3]);
 }

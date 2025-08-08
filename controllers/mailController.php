@@ -6,7 +6,7 @@ require_once __DIR__ . '/../models/mail.php';
 class MailController
 {
 
-    public function envoyerRefus($pseudo, $email, $dateDepart)
+    public function envoyerRefus($pseudo, $email)
     {
 
         ob_start();
@@ -17,7 +17,7 @@ class MailController
 
         return $envoi;
     }
-    public function envoyerAcceptation($pseudo, $email, $dateDepart)
+    public function envoyerAcceptation($pseudo, $email)
     {
         ob_start();
         require __DIR__ . '/../utils/models_mail/mail_acceptation.php';
@@ -34,6 +34,16 @@ class MailController
         $contenu = ob_get_clean();
         $mail = new Mail;
         $envoi = $mail->envoyer($email, $pseudo, "ECORIDE - Covoiturage annulé", $contenu);
+        return $envoi;
+    }
+    public function envoyerFeedback($pseudo, $email)
+    {
+
+        ob_start();
+        require __DIR__ . '/../utils/models_mail/mail_feedback.php';
+        $contenu = ob_get_clean();
+        $mail = new Mail;
+        $envoi = $mail->envoyer($email, $pseudo, "ECORIDE - Covoiturage terminé", $contenu);
         return $envoi;
     }
 }
