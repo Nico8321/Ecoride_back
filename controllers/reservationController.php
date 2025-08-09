@@ -301,4 +301,32 @@ class ReservationController
         echo json_encode(["message" => " Votre réservation est maintenant terminée , le paiement au conducteur a bien été effectué "]);
         return;
     }
+    public function litigeReservation($data, $reservationId, $userId)
+    {
+        if (empty($data['message'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Le message est requis']);
+            return;
+        }
+        $reservation = Reservation::getReservationById($this->pdo, $reservationId);
+        if (!$reservation) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Reservation introuvable']);
+            return;
+        }
+        if ($reservation['utilisateur_id'] != $userId) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Action impossible vous ne disposez pas des droits necessaires']);
+            return;
+        }
+
+
+        $litigeData = [
+            'reservation_id' => $reservationId,
+            'utilisateur_id' => $userId,
+            'message' => $data['message']
+        ];
+        $controller = new litigeController();
+        $controller->createLitige($litigeData);
+    }
 }
