@@ -1,7 +1,8 @@
 <?php
-require_once __DIR__ . '/../models/litige.php';
 
-class litigeController
+require_once __DIR__ . '/../models/litige.php';
+require_once __DIR__ . '/../config/mongo.php';
+class LitigeController
 {
     private $col;
     public function __construct()
@@ -26,7 +27,7 @@ class litigeController
             return;
         };
         http_response_code(201);
-        echo json_encode(["message" => "Litige enregistré, id :" . $res]);
+        echo json_encode(["id" => (string)$res, "message" => "Litige enregistré"]);
         return;
     }
 }

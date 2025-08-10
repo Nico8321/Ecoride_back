@@ -7,6 +7,7 @@ require_once __DIR__ . '/../models/utilisateur.php';
 require_once __DIR__ . '/../models/vehicule.php';
 require_once __DIR__ . '/../models/avis.php';
 require_once __DIR__ . '/mailController.php';
+require_once __DIR__ . '/litigeController.php';
 class ReservationController
 {
     private $pdo;
@@ -290,7 +291,7 @@ class ReservationController
             return;
         }
 
-        $montantConducteur = $covoiturage['prix'] - 2 * $reservation['nb_places'];
+        $montantConducteur = ($covoiturage['prix'] - 2) * $reservation['nb_places'];
         $paiementUtilisateur = Utilisateur::addCreditUtilisateur($this->pdo, $covoiturage['conducteur_id'], $montantConducteur);
         if (!$paiementUtilisateur) {
             http_response_code(500);
@@ -326,7 +327,7 @@ class ReservationController
             'utilisateur_id' => $userId,
             'message' => $data['message']
         ];
-        $controller = new litigeController();
+        $controller = new LitigeController();
         $controller->createLitige($litigeData);
     }
 }
