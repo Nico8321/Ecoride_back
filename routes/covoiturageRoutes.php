@@ -30,7 +30,7 @@ if ($method === 'GET' && $uri[0] === 'covoiturages' && count($uri) === 1) {
     $controller->rechercheCovoiturages($filtres);
 }
 if ($method === 'PATCH' && $uri[0] === 'covoiturage' && $uri[1] === 'annuler' && isset($uri[2]) && isset($uri[3])) {
-    $controller->deleteCovoiturage($uri[2], $uri[3]);
+    $controller->annuleCovoiturage($uri[2], $uri[3]);
 }
 if ($method === 'PATCH' && $uri[0] === 'covoiturage' && $uri[1] === 'demarrer' && isset($uri[2]) && isset($uri[3])) {
     $controller->demarrerCovoiturage($uri[2], $uri[3]);

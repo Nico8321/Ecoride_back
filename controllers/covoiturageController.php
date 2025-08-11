@@ -122,7 +122,7 @@ class CovoiturageController
             return;
         }
     }
-    public function deleteCovoiturage($userId, $covoiturageId)
+    public function annuleCovoiturage($userId, $covoiturageId)
     {
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $covoiturageId);
         if (!$covoiturage) {
@@ -135,7 +135,7 @@ class CovoiturageController
             $controller = new ReservationController();
             foreach ($reservations as &$reservation) {
                 if ($reservation['statut'] == 'confirme')
-                    $controller->refuseReservation($reservation['id']);
+                    $controller->refuseReservation($reservation['id'], $userId);
             }
         };
         if ($covoiturage['conducteur_id'] == $userId) {
@@ -182,27 +182,43 @@ class CovoiturageController
     }
     public function terminerCovoiturage($userId, $covoiturageId)
     {
+        // Vérifier que le covoiturage existe
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $covoiturageId);
         if (!$covoiturage) {
             http_response_code(404);
             echo json_encode(["error" => "Covoiturage introuvable"]);
             return;
         }
-        if ($covoiturage['conducteur_id'] == $userId) {
-            $succes = Covoiturage::changeStatutCovoiturage($this->pdo, $covoiturageId, 'termine');
-            if ($succes) {
-                http_response_code(200);
-                echo json_encode(["message" => "Covoiturage terminé"]);
-                return;
-            } else {
-                http_response_code(404);
-                echo json_encode(["error" => "Covoiturage non trouvé ou non modifié"]);
-                return;
-            }
-        } else {
+
+        // Vérifier que c'est bien le conducteur
+        if ($covoiturage['conducteur_id'] != $userId) {
             http_response_code(403);
             echo json_encode(["error" => "Action interdite"]);
             return;
         }
+
+        // Changer le statut du covoiturage
+        $succes = Covoiturage::changeStatutCovoiturage($this->pdo, $covoiturageId, 'termine');
+        if (!$succes) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage non trouvé ou non modifié"]);
+            return;
+        }
+
+        // Récupérer toutes les réservations et envoyer un mail de feedback pour chaque réservation confirmée
+        $reservations = Reservation::getByCovoiturageId($this->pdo, $covoiturageId);
+        if (!empty($reservations)) {
+            $controller = new ReservationController();
+            foreach ($reservations as $reservation) {
+                if ($reservation['statut'] === 'confirme') {
+                    $controller->feedbackReservation($reservation['id']);
+                }
+            }
+        }
+
+        // Réponse finale
+        http_response_code(200);
+        echo json_encode(["message" => "Covoiturage terminé"]);
+        return;
     }
 }

@@ -96,4 +96,37 @@ class Reservation
             $id
         ]);
     }
+    public static function AwaitingFeedback(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE reservation SET
+            statut = 'retour client'
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
+    public static function terminerReservation(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE reservation SET
+            statut = 'termine' 
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
+    public static function litigeReservation(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE reservation SET
+            statut = 'litige' 
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
 }
