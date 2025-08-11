@@ -135,7 +135,7 @@ class CovoiturageController
             $controller = new ReservationController();
             foreach ($reservations as &$reservation) {
                 if ($reservation['statut'] == 'confirme')
-                    $controller->refuseReservation($reservation['id']);
+                    $controller->refuseReservation($reservation['id'], $userId);
             }
         };
         if ($covoiturage['conducteur_id'] == $userId) {
