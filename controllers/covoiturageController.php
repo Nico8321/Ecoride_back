@@ -133,11 +133,13 @@ class CovoiturageController
         $reservations = Reservation::getByCovoiturageId($this->pdo, $covoiturageId);
         if ($reservations) {
             $controller = new ReservationController();
-            foreach ($reservations as &$reservation) {
-                if ($reservation['statut'] == 'confirme')
-                    $controller->refuseReservation($reservation['id'], $userId);
+
+            foreach ($reservations as $reservation) {
+                if ($reservation['statut'] == 'confirme') {
+                    ($controller->refuseReservationInternal($reservation['id'], $userId));
+                }
             }
-        };
+        }
         if ($covoiturage['conducteur_id'] == $userId) {
             $succes = Covoiturage::annulerCovoiturage($this->pdo, $covoiturageId);
             if ($succes) {
@@ -182,6 +184,7 @@ class CovoiturageController
     }
     public function terminerCovoiturage($userId, $covoiturageId)
     {
+
         // Vérifier que le covoiturage existe
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $covoiturageId);
         if (!$covoiturage) {
@@ -211,7 +214,7 @@ class CovoiturageController
             $controller = new ReservationController();
             foreach ($reservations as $reservation) {
                 if ($reservation['statut'] === 'confirme') {
-                    $controller->feedbackReservation($reservation['id']);
+                    $controller->feedbackReservationInternal($reservation['id']);
                 }
             }
         }
