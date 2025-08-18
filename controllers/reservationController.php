@@ -196,14 +196,13 @@ class ReservationController
             return false;
         }
 
+        $refuser = Reservation::refuserReservation($this->pdo, $id);
+        if (!$refuser) {
+            return false;
+        }
         $montant = $covoiturage['prix'] * $reservation['nb_places'];
         $remboursement = Utilisateur::addCreditUtilisateur($this->pdo, $reservation['utilisateur_id'], $montant);
         if (!$remboursement) {
-            return false;
-        }
-
-        $refuser = Reservation::refuserReservation($this->pdo, $id);
-        if (!$refuser) {
             return false;
         }
 
@@ -248,10 +247,8 @@ class ReservationController
         }
         $user = Utilisateur::findUtilisateurById($this->pdo, $reservation['utilisateur_id']);
         $mailController = new MailController();
-        $notification = $mailController->envoyerFeedback($user['pseudo'], $user['email']);
-        if (!$notification) {
-            return false;
-        }
+        $mailController->envoyerFeedback($user['pseudo'], $user['email']);
+
         return true;
     }
 
@@ -278,12 +275,7 @@ class ReservationController
             echo json_encode(["error" => "Action impossible vous ne disposez pas des droits necessaires"]);
             return;
         }
-        $termine = Reservation::terminerReservation($this->pdo, $id);
-        if (!$termine) {
-            http_response_code(500);
-            echo json_encode(["error" => "Erreur lors du changement de statut de la réservation "]);
-            return;
-        }
+
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $reservation['covoiturage_id']);
         if (!$covoiturage) {
             http_response_code(500);
@@ -293,6 +285,12 @@ class ReservationController
         if ($covoiturage['statut'] != 'termine') {
             http_response_code(403);
             echo json_encode(["error" => "Veuillez attendre la fin du covoiturage pour terminer la réservation "]);
+            return;
+        }
+        $termine = Reservation::terminerReservation($this->pdo, $id);
+        if (!$termine) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors du changement de statut de la réservation "]);
             return;
         }
 
@@ -334,5 +332,58 @@ class ReservationController
         ];
         $controller = new LitigeController();
         $controller->createLitige($litigeData);
+    }
+    public function annulerReservation($id, $userId)
+    {
+        $reservation = Reservation::getReservationById($this->pdo, $id);
+        if (!$reservation) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Reservation introuvable']);
+            return;
+        }
+        if ($reservation['utilisateur_id'] != $userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Action impossible vous ne disposez pas des droits necessaires"]);
+            return;
+        }
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $reservation['covoiturage_id']);
+        if (!$covoiturage) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        $date = new DateTime(); // maintenant
+        $dateDepart = new DateTime($covoiturage['date_depart']);
+        if ($reservation['statut'] == 'confirme') {
+            if ($dateDepart <= (clone $date)->modify('+1 day')) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Action impossible, la date de départ est trop proche']);
+                return;
+            }
+        }
+        $annuler = Reservation::annulerReservation($this->pdo, $reservation['id']);
+        if (!$annuler) {
+            http_response_code(500);
+            echo json_encode(['error' => "Erreur lors de l'annulation de votre réservation"]);
+            return;
+        }
+        $montantRemboursement = $reservation['nb_places'] * $covoiturage['prix'];
+        $remboursement = Utilisateur::addCreditUtilisateur($this->pdo, $reservation['utilisateur_id'], $montantRemboursement);
+        if (!$remboursement) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Erreur lors du remboursement de votre reservation']);
+            return;
+        }
+        if ($reservation['statut'] == 'confirme') {
+            $majNbPlace = Covoiturage::addPlaces($this->pdo, $covoiturage['id'], $reservation['nb_places']);
+            if (!$majNbPlace) {
+                http_response_code(500);
+                echo json_encode(['error' => 'Erreur lors de la mise a jour du nombres de place disponible sur le covoiturage concerné']);
+                return;
+            }
+        }
+        http_response_code(200);
+        echo json_encode(["message" => " Votre réservation a été annulée"]);
+        return;
     }
 }

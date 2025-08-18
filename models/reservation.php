@@ -129,4 +129,15 @@ class Reservation
             $id
         ]);
     }
+    public static function annulerReservation(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE reservation SET
+            statut = 'annule'
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
 }
