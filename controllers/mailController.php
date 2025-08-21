@@ -6,7 +6,7 @@ require_once __DIR__ . '/../models/mail.php';
 class MailController
 {
 
-    public function envoyerRefus($pseudo, $email)
+    public function envoyerRefus($pseudo, $email, $dateDepart)
     {
 
         ob_start();
@@ -17,7 +17,7 @@ class MailController
 
         return $envoi;
     }
-    public function envoyerAcceptation($pseudo, $email)
+    public function envoyerAcceptation($pseudo, $email, $dateDepart)
     {
         ob_start();
         require __DIR__ . '/../utils/models_mail/mail_acceptation.php';

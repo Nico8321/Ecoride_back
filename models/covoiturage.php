@@ -203,6 +203,18 @@ class Covoiturage
             $conditions[] = "duree <= ?";
             $params[] = $filtres['duree'];
         }
+        if (!empty($filtres['userId'])) {
+            $conditions[] = "c.conducteur_id <> ?";
+            $params[] = $filtres['userId'];
+        }
+
+        $conditions[] = "(c.date_depart > CURDATE() 
+                  OR (c.date_depart = CURDATE() AND c.heure_depart >= CURTIME()))";
+
+        $conditions[] = "c.statut = 'ouvert'";
+
+
+        $conditions[] = "c.nb_places > 0";
 
         $sql = "SELECT c.* 
          FROM covoiturage c 

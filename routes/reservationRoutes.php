@@ -29,6 +29,9 @@ if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'refuse' && 
 if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'termine' && isset($uri[2]) && isset($uri[3])) {
     $controller->terminerReservation($uri[2], $uri[3]);
 }
+if ($method === 'PATCH' && $uri[0] === 'reservation' && $uri[1] === 'annuler' && isset($uri[2]) && isset($uri[3])) {
+    $controller->annulerReservation($uri[2], $uri[3]);
+}
 if ($method === 'POST' && $uri[0] === 'reservation' && $uri[1] === 'litige' && isset($uri[2]) && isset($uri[3])) {
     $data = json_decode(file_get_contents("php://input"), true);
     $controller->litigeReservation($data, $uri[2], $uri[3]);

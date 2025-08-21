@@ -1,19 +1,23 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '');
-$dotenv->load();
-// CORS
-header('Access-Control-Allow-Origin: *');
+//CORS
+header('Access-Control-Allow-Origin: https://ecoride-front-w7vl.vercel.app');
 header('Access-Control-Allow-Methods: GET, POST, PUT,PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
 // Gérer les requêtes préflight CORS
+
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
-    exit();
+    exit;
 }
+
+
+
+
+
 
 require_once __DIR__ . '/config/database.php';
 
