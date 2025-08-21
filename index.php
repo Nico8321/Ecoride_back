@@ -1,8 +1,20 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
+// charger .env uniquement s'il existe (local / préprod auto-hébergée)
+$envPath = __DIR__;
+if (file_exists($envPath . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable($envPath);
+    $dotenv->load();
+}
 
 //CORS
-header('Access-Control-Allow-Origin: https://ecoride-front-w7vl.vercel.app');
+if ($_SERVER['SERVER_NAME'] === 'localhost') {
+    $allowedOrigin = 'http://localhost:3000';
+} else {
+    $allowedOrigin = 'https://ecoride-front-w7vl.vercel.app';
+}
+
+header("Access-Control-Allow-Origin: $allowedOrigin");
 header('Access-Control-Allow-Methods: GET, POST, PUT,PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
