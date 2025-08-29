@@ -28,23 +28,24 @@ class Litige
 
         $res = $col->insertOne([
             'reservation' => [
-                'id' => $data['reservation_id'],
-                'nb_places' => $data['nb_places']
+                'id'         => $data['reservation']['id'],
+                'nb_places'  => $data['reservation']['nb_places'],
             ],
             'redacteur' => [
-                'id' => $data['utilisateur_id'],
-                'pseudo' => $data['utilisateur_pseudo'],
-                'mail' => $data['utilisateur_mail'],
+                'id'     => $data['redacteur']['id'],
+                'pseudo' => $data['redacteur']['pseudo'],
+                'mail'   => $data['redacteur']['mail'],
             ],
             'conducteur' => [
-                'id' => $data['conducteur_id'],
-                'pseudo' => $data['conducteur_pseudo'],
-                'mail' => $data['conducteur_mail'],
+                'id'     => $data['conducteur']['id'],
+                'pseudo' => $data['conducteur']['pseudo'],
+                'mail'   => $data['conducteur']['mail'],
             ],
             'covoiturage' => [
-                'date_depart' => $data['date_depart'],
-                'prix' => $data['prix'],
-                'ville_depart' => $data['ville_depart'],
+                'date_depart'    => $data['covoiturage']['date_depart'],
+                'prix'           => $data['covoiturage']['prix'],
+                'ville_depart'   => $data['covoiturage']['ville_depart'],
+                'ville_arrivee'  => $data['covoiturage']['ville_arrivee'],
             ],
             'message' => $data['message'],
             'status'    => 'en_attente',

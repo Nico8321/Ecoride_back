@@ -7,18 +7,32 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../utils/apiAdresse.php';
 require_once __DIR__ . '/../utils/apiOsrm.php';
 require_once __DIR__ . '/../controllers/reservationController.php';
+require_once __DIR__ . '/../utils/securisationSortie.php';
 
 class CovoiturageController
 {
+
     private $pdo;
+
     public function __construct()
     {
         $this->pdo = Database::getConnection();
     }
+
     public function getPdo()
     {
         return $this->pdo;
     }
+
+    public function getByCovoiturageId($id)
+    {
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $id);
+        if (!$covoiturage) {
+            return false;
+        }
+        return $covoiturage;
+    }
+
     public function getByConducteurId($id)
     {
         $covoiturages = Covoiturage::findCovoiturageByUtilisateurId($this->pdo, $id);
@@ -68,7 +82,7 @@ class CovoiturageController
         $data['villeArrivee'] = $infos['ville'];
         $data['latitudeArrivee'] = $infos['latitude'];
         $data['longitudeArrivee'] = $infos['longitude'];
-        unset($data['arrive']);
+        unset($data['arrivee']);
         unset($data['depart']);
         return $data;
     }
