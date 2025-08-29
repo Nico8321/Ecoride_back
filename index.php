@@ -67,6 +67,9 @@ switch ($base) {
     case 'litige':
         require_once __DIR__ . '/routes/litigeRoutes.php';
         break;
+    case 'litiges':
+        require_once __DIR__ . '/routes/litigeRoutes.php';
+        break;
     default:
         http_response_code(404);
         echo json_encode(['error' => 'Route inconnue']);

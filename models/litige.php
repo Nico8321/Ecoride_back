@@ -19,7 +19,6 @@ class Litige
     }
 
     //Creer Litige
-
     public static function create(Collection $col, $data)
     {
         if (empty($data['message'])) {
@@ -56,17 +55,14 @@ class Litige
         return $res->getInsertedId();
     }
 
-    //Recuperer litige par l'id
-
+    //Récuperation un litige par l'id
     public static function getById(Collection $col, $id)
     {
-
 
         return $col->findOne(['_id' => self::oid($id)]);
     }
 
     //Ajout d'une note de suivi au litige
-
     public static function addNote(Collection $col, $id, $note)
     {
         return $col->updateOne(
@@ -82,20 +78,25 @@ class Litige
     }
 
     // Récuperation des litiges en attente 
-
     public static function getLitigeEnAttente(Collection $col)
     {
         return $col->find(['status' => 'en_attente'], ['sort' => ['createdAt' => -1]]);
     }
-    // Récuperation des litiges en traitement
 
+    // Récuperation des litiges en traitement
     public static function getLitigeEnTraitement(Collection $col)
     {
         return $col->find(['status' => 'en_traitement'], ['sort' => ['createdAt' => -1]]);
     }
 
-    //Cloture d'un litige
+    // Récuperation de tous les litiges 
+    public static function getAll(Collection $col)
+    {
+        return $col->find([], ['sort' => ['createdAt' => -1]]);
+    }
 
+
+    //Cloture d'un litige
     public static function cloture(Collection $col, $id)
     {
         return $col->updateOne(

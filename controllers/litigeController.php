@@ -110,4 +110,40 @@ class LitigeController
         echo json_encode(["id" => (string)$res, "message" => "Litige enregistré"]);
         return;
     }
+    public function cloturerLitige($id)
+    {
+        $res = Litige::cloture($this->col, $id);
+        if (!$res) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors de la cloture du litige"]);
+            return;
+        }
+        echo json_encode(["message" => "Litige $id clôturé avec succès"]);
+    }
+    public function getLitigeById($id)
+    {
+        $litige = Litige::getById($this->col, $id);
+        if (!$litige) {
+            http_response_code(404);
+            echo json_encode(["error" => "Litige Introuvable"]);
+            return;
+        }
+        echo json_encode(securisationSortie($litige));
+        return;
+    }
+    public function getAllLitiges()
+    {
+        $litiges = iterator_to_array(Litige::getAll($this->col));
+        echo json_encode(securisationSortie($litiges));
+    }
+    public function addNoteLitige($id, $data)
+    {
+        $litige = Litige::addNote($this->col, $id, $data);
+        if (!$litige) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors de l'ajout de la note"]);
+            return;
+        }
+        echo json_encode(["message" => "Note ajoutée avec succés"]);
+    }
 }
