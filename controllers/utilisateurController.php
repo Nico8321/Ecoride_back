@@ -59,7 +59,7 @@ class UtilisateurController
         if ($utilisateur && password_verify($data['password'], $utilisateur['password'])) {
             unset($utilisateur['password']);
             $auth = new AuthController();
-            $token = $auth->generateJWT($utilisateur['id']);
+            $token = $auth->generateJWT($utilisateur['id'], $utilisateur['role_id']);
             $utilisateur['token'] = $token;
             $vehicules = Vehicule::findByUtilisateurId($this->pdo, $utilisateur['id']);
             $utilisateur['vehicules'] = $vehicules;
