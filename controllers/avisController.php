@@ -38,7 +38,23 @@ class AvisController
         }
         echo json_encode(securisationSortie($listAvis));
     }
-
+    public function getAllAvisToCheck()
+    {
+        $listAvis = Avis::findAllToCheck($this->pdo);
+        if ($listAvis) {
+            foreach ($listAvis as &$avis) {
+                $utilisateurId = $avis['auteur_id'];
+                $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $utilisateurId);
+                if ($utilisateur) {
+                    $avis['auteur_photo'] = $utilisateur['photo']
+                        ?  $utilisateur['photo']
+                        : null;
+                    $avis['auteur_pseudo'] = $utilisateur['pseudo'];
+                }
+            }
+        }
+        echo json_encode(securisationSortie($listAvis));
+    }
 
 
     public function getMoyenneByUtilisateurId($id)
@@ -74,6 +90,16 @@ class AvisController
         } else {
             http_response_code(400);
             echo json_encode(["error" => "Échec de la validation de l'avis"]);
+        }
+    }
+    public function refusAvis($id)
+    {
+        $result = Avis::refuserAvis($this->pdo, $id);
+        if ($result) {
+            echo json_encode(["message" => "Avis refusé"]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "Échec du refus de l'avis"]);
         }
     }
 }

@@ -7,7 +7,7 @@ require_once __DIR__ . '/../models/utilisateur.php';
 require_once __DIR__ . '/../models/vehicule.php';
 require_once __DIR__ . '/../models/avis.php';
 require_once __DIR__ . '/mailController.php';
-require_once __DIR__ . '/litigeController.php';
+
 class ReservationController
 {
     private $pdo;
@@ -19,6 +19,15 @@ class ReservationController
     public function getPdo()
     {
         return $this->pdo;
+    }
+    public function getReservationById($id)
+    {
+        $reservation = Reservation::getReservationById($this->pdo, $id);
+        if (!$reservation) {
+
+            return false;
+        }
+        return $reservation;
     }
 
     public function createReservation($data, $id)
@@ -305,34 +314,13 @@ class ReservationController
         echo json_encode(["message" => " Votre réservation est maintenant terminée , le paiement au conducteur a bien été effectué "]);
         return;
     }
-    public function litigeReservation($data, $reservationId, $userId)
+    public function litigeReservation($id)
     {
-        if (empty($data['message'])) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Le message est requis']);
-            return;
-        }
-        $reservation = Reservation::getReservationById($this->pdo, $reservationId);
-        if (!$reservation) {
-            http_response_code(404);
-            echo json_encode(['error' => 'Reservation introuvable']);
-            return;
-        }
-        if ($reservation['utilisateur_id'] != $userId) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Action impossible vous ne disposez pas des droits necessaires']);
-            return;
-        }
-
-
-        $litigeData = [
-            'reservation_id' => $reservationId,
-            'utilisateur_id' => $userId,
-            'message' => $data['message']
-        ];
-        $controller = new LitigeController();
-        $controller->createLitige($litigeData);
+        $ok = Reservation::litigeReservation($this->pdo, $id);
+        if (!$ok) return false;
+        return true;
     }
+
     public function annulerReservation($id, $userId)
     {
         $reservation = Reservation::getReservationById($this->pdo, $id);

@@ -29,6 +29,16 @@ class UtilisateurController
         echo json_encode(securisationSortie($utilisateur));
     }
 
+    public function getOneInternal($id) //recuperation d'un utilisateur par l'id 
+    {
+        $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
+        if (!$utilisateur) {
+            return false;
+        }
+        unset($utilisateur['password']);
+        return $utilisateur;
+    }
+
     public function signUp($data)
     {
         if (Utilisateur::emailExists($this->pdo, $data['email'])) {
