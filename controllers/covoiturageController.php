@@ -87,8 +87,13 @@ class CovoiturageController
         return $data;
     }
 
-    public function addCovoiturage($data)
+    public function addCovoiturage($data, $userId)
     {
+        if ((int)$data['conducteurId'] !== (int)$userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Action interdite"]);
+            return;
+        }
         $dataWithAdresse = $this->decoupageAdresse($data);
         $dataWithDuree = $this->addDureeTrajet($dataWithAdresse);
         $covoiturage = new Covoiturage($dataWithDuree);
