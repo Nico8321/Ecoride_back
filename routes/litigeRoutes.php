@@ -11,6 +11,7 @@ header('Content-Type: application/json');
 
 
 if ($method === 'POST' && $uri[0] === 'litige' && isset($uri[1], $uri[2])) {
+    checkId($uri[2]);
     $data = json_decode(file_get_contents("php://input"), true);
     $controller->createLitige($uri[1], $uri[2], $data);
 }
