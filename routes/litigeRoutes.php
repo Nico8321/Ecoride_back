@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../controllers/litigeController.php';
-require_once __DIR__ . '/../utils/requireRoleId.php';
+require_once __DIR__ . '/../utils/requireAuth.php';
 
 $controller = new LitigeController();
 $method = $_SERVER['REQUEST_METHOD'];

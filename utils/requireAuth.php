@@ -11,3 +11,11 @@ function requireRole($roleId)
         exit;
     }
 }
+function checkId($id)
+{
+    $auth = new AuthController();
+    if (!$auth->verifyId($id)) {
+        echo json_encode(["error" => "Accès interdit"]);
+        exit;
+    }
+}

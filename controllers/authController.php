@@ -74,7 +74,11 @@ class AuthController
 
         try {
             $decoded = JWT::decode($token, new Key($this->secretKey, 'HS256'));
-            return ((string)$id === (string)$decoded->userId);
+            if ((string)$id === (string)$decoded->userId) {
+                return true;
+            }
+            http_response_code(403);
+            return false;
         } catch (Exception $e) {
             http_response_code(401);
             return false;
