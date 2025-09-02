@@ -54,7 +54,7 @@ class VehiculeController
             return;
         }
 
-        if ($vehicule["utilisateur_id"] != $utilisateur_id) {
+        if ((int)$vehicule['utilisateur_id'] !== (int)$utilisateur_id) {
             http_response_code(403);
             echo json_encode(["error" => "Suppression non autorisée"]);
             return;

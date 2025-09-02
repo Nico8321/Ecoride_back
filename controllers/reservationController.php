@@ -30,8 +30,13 @@ class ReservationController
         return $reservation;
     }
 
-    public function createReservation($data, $id)
+    public function createReservation($data, $id, $userId)
     {
+        if ((int)$data['utilisateurId'] !== (int)$userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Action interdite"]);
+            return;
+        }
         $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $id);
         if ($covoiturage['nb_places'] >= $data['nbPlaces']) {
             $prix = $covoiturage['prix'] * $data['nbPlaces'];
@@ -105,10 +110,21 @@ class ReservationController
         return;
     }
 
-    public function getReservationByCovoiturageId($id)
+    public function getReservationByCovoiturageId($id, $userId)
     {
-        $reservations = Reservation::getByCovoiturageId($this->pdo, $id);
 
+        $covoiturage = Covoiturage::findCovoiturageById($this->pdo, $id);
+        if (!$covoiturage) {
+            http_response_code(404);
+            echo json_encode(["error" => "Covoiturage introuvable"]);
+            return;
+        }
+        if ((int)$covoiturage['conducteur_id'] !== (int)$userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Action interdite"]);
+            return;
+        }
+        $reservations = Reservation::getByCovoiturageId($this->pdo, $id);
         if ($reservations === false) {
             http_response_code(500);
             echo json_encode(["error" => "Erreur lors de la récupération des réservations"]);
@@ -329,7 +345,7 @@ class ReservationController
             echo json_encode(['error' => 'Reservation introuvable']);
             return;
         }
-        if ($reservation['utilisateur_id'] != $userId) {
+        if ((int)$reservation['utilisateur_id'] !== (int)$userId) {
             http_response_code(403);
             echo json_encode(["error" => "Action impossible vous ne disposez pas des droits necessaires"]);
             return;

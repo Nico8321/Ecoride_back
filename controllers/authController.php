@@ -13,7 +13,7 @@ class AuthController
     {
         $this->secretKey = $_ENV['JWT_SECRET'] ?? false;
     }
-    public  function  generateJWT($userId, $role)
+    public  function  generateJWT($userId, $roleId)
     {
         $issuedAt = time();
         $expiration = $issuedAt + 900;
@@ -22,7 +22,7 @@ class AuthController
             'iat' => $issuedAt,
             'exp' => $expiration,
             'userId' => $userId,
-            'role' => $role,
+            'role_id' => $roleId,
 
         ];
 
@@ -74,13 +74,17 @@ class AuthController
 
         try {
             $decoded = JWT::decode($token, new Key($this->secretKey, 'HS256'));
-            return ((string)$id === (string)$decoded->userId);
+            if ((string)$id === (string)$decoded->userId) {
+                return true;
+            }
+            http_response_code(403);
+            return false;
         } catch (Exception $e) {
             http_response_code(401);
             return false;
         }
     }
-    public function verifyRole($role)
+    public function verifyRole($roleId)
     {
         $headers = getallheaders();
 
@@ -99,7 +103,7 @@ class AuthController
 
         try {
             $decoded = JWT::decode($token, new Key($this->secretKey, 'HS256'));
-            if ((string)$role === (string)$decoded->role) {
+            if ((string)$roleId === (string)$decoded->role_id) {
                 return true;
             }
             http_response_code(403);

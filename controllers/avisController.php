@@ -63,8 +63,13 @@ class AvisController
         echo json_encode(["moyenne" => $moyenne]);
     }
 
-    public function addAvis($data)
+    public function addAvis($data, $userId)
     {
+        if ((int)$data['auteur_id'] !== (int)$userId) {
+            http_response_code(403);
+            echo json_encode(["error" => "Action impossible vous ne disposez pas des droits necessaires"]);
+            return;
+        }
         $result = Avis::create(
             $this->pdo,
             $data['covoiturage_id'],
