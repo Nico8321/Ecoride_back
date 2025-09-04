@@ -44,3 +44,7 @@ if ($method === 'PATCH' && $uri[0] === 'covoiturage' && $uri[1] === 'terminer' &
     checkId($uri[2]);
     $controller->terminerCovoiturage($uri[2], $uri[3]);
 }
+if ($method === 'GET' && $uri[0] === 'covoiturage' &&  isset($uri[1]) && $uri[1] === 'historique') {
+    requireRole(2); // a remplacer par 3 en prod 
+    $controller->historiqueCovoiturage();
+}

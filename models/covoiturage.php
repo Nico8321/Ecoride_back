@@ -268,4 +268,16 @@ class Covoiturage
             $id
         ]);
     }
+    public static function getHistoriqueCovoiturage(PDO $pdo)
+    {
+        $stmt = $pdo->prepare('
+SELECT DATE(date_depart) AS jour, COUNT(*) AS total
+FROM covoiturage
+WHERE statut = "termine"
+GROUP BY DATE(date_depart)
+ORDER BY jour ASC;
+    ');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
