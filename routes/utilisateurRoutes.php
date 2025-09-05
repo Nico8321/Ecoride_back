@@ -34,3 +34,7 @@ if ($method === 'POST' && $uri[0] === 'user' && $uri[1] === 'photo' && isset($ur
     checkId($uri[2]);
     $controller->addPhoto($uri[2]);
 }
+if ($method === 'GET' && $uri[0] === 'user' && isset($uri[1], $uri[2]) && $uri[1] === "admin" && $uri[2] === "gestion") {
+    requireRole(2); // a changer par 3 en preprod
+    $controller->getAllForAdmin();
+}

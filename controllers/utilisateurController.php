@@ -195,4 +195,15 @@ class UtilisateurController
             return;
         }
     }
+    public function getAllForAdmin()
+    {
+        $utilisateurs = Utilisateur::getAll($this->pdo);
+        if (empty($utilisateurs)) {
+            http_response_code(200);
+            echo json_encode([]);
+            return;
+        } else {
+            echo json_encode(securisationSortie($utilisateurs));
+        }
+    }
 }
