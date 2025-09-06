@@ -8,6 +8,6 @@ $method = $_SERVER['REQUEST_METHOD'];
 header('Content-Type: application/json');
 
 if ($method === 'GET' && $uri[0] === 'transaction' &&  isset($uri[1]) && $uri[1] === 'historique') {
-    requireRole(2); // a remplacer par 3 en prod 
+    requireRole(3);
     $controller->getHistorique();
 }
