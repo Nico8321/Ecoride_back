@@ -33,8 +33,13 @@ if ($method === 'DELETE' && $uri[0] === 'user' && isset($uri[1]) && !isset($uri[
 if ($method === 'POST' && $uri[0] === 'user' && $uri[1] === 'photo' && isset($uri[2])) {
     checkId($uri[2]);
     $controller->addPhoto($uri[2]);
-}
+} //récuperation des utilisateurs( route admin)
 if ($method === 'GET' && $uri[0] === 'user' && isset($uri[1], $uri[2]) && $uri[1] === "admin" && $uri[2] === "gestion") {
     requireRole(2); // a changer par 3 en preprod
     $controller->getAllForAdmin();
+}
+if ($method === 'POST' && $uri[0] === 'user' && isset($uri[1], $uri[2]) && $uri[1] === 'admin' && $uri[2] === 'employe') {
+    requireRole(2);
+    $data = json_decode(file_get_contents("php://input"), true);
+    $controller->addEmploye($data);
 }

@@ -206,4 +206,21 @@ class UtilisateurController
             echo json_encode(securisationSortie($utilisateurs));
         }
     }
+    public function addEmploye($data)
+    {
+        if (Utilisateur::emailExists($this->pdo, $data['email'])) {
+            http_response_code(409);
+            echo json_encode(["error" => "Email déjà utilisé"]);
+            return;
+        }
+        $data['role_id'] = 2; // employé
+        $ok = Utilisateur::ajoutEmploye($this->pdo, $data);
+        if ($ok) {
+            http_response_code(201);
+            echo json_encode(["message" => "Employé créé"]);
+            return;
+        }
+        http_response_code(500);
+        echo json_encode(["error" => "Insertion échouée"]);
+    }
 }

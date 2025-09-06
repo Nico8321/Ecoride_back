@@ -193,4 +193,18 @@ class Utilisateur
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public static function ajoutEmploye(PDO $pdo, $data)
+    {
+        $stmt = $pdo->prepare("
+        INSERT INTO utilisateur (nom, prenom, email, password, role_id)
+        VALUES (?, ?, ?, ?, ?)
+    ");
+        return $stmt->execute([
+            $data['nom'],
+            $data['prenom'],
+            $data['email'],
+            password_hash($data['password'], PASSWORD_BCRYPT),
+            $data['role_id'],
+        ]);
+    }
 }
