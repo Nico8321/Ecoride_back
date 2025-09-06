@@ -189,7 +189,7 @@ class Utilisateur
     }
     public static function getAll(PDO $pdo)
     {
-        $stmt = $pdo->prepare("SELECT id, pseudo, nom, prenom, email, role_id FROM utilisateur ORDER BY role_id ASC");
+        $stmt = $pdo->prepare("SELECT id, pseudo, nom, prenom, email, role_id, active FROM utilisateur ORDER BY role_id ASC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

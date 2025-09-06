@@ -43,11 +43,11 @@ if ($method === 'POST' && $uri[0] === 'user' && isset($uri[1], $uri[2]) && $uri[
     $data = json_decode(file_get_contents("php://input"), true);
     $controller->addEmploye($data);
 }
-if ($method === 'PATCH' && $uri[0] === 'user' && isset($uri[1], $uri[2],  $uri[3]) && $uri[2] === "suspension") {
+if ($method === 'PATCH' && $uri[0] === 'user' && isset($uri[1], $uri[2],) && $uri[1] === "suspension") {
     requireRole(2);
-    $controller->suspendreCompte($uri[3]);
+    $controller->suspendreCompte($uri[2]);
 }
-if ($method === 'PATCH' && $uri[0] === 'user' && isset($uri[1], $uri[2],  $uri[3]) && $uri[2] === "reactiver") {
+if ($method === 'PATCH' && $uri[0] === 'user' && isset($uri[1], $uri[2]) && $uri[1] === "reactiver") {
     requireRole(2);
-    $controller->reactiverCompte($uri[3]);
+    $controller->reactiverCompte($uri[2]);
 }
