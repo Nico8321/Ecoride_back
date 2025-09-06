@@ -187,4 +187,46 @@ class Utilisateur
 
         return $credit !== false && $credit >= $prix;
     }
+    public static function getAll(PDO $pdo)
+    {
+        $stmt = $pdo->prepare("SELECT id, pseudo, nom, prenom, email, role_id, active FROM utilisateur ORDER BY role_id ASC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public static function ajoutEmploye(PDO $pdo, $data)
+    {
+        $stmt = $pdo->prepare("
+        INSERT INTO utilisateur (nom, prenom, email, password, role_id)
+        VALUES (?, ?, ?, ?, ?)
+    ");
+        return $stmt->execute([
+            $data['nom'],
+            $data['prenom'],
+            $data['email'],
+            password_hash($data['password'], PASSWORD_BCRYPT),
+            $data['role_id'],
+        ]);
+    }
+    public static function suspendre(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE utilisateur SET
+            active = 0
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
+    public static function activer(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE utilisateur SET
+            active = 1
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
 }

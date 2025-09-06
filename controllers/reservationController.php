@@ -6,6 +6,7 @@ require_once __DIR__ . '/../utils/securisationSortie.php';
 require_once __DIR__ . '/../models/utilisateur.php';
 require_once __DIR__ . '/../models/vehicule.php';
 require_once __DIR__ . '/../models/avis.php';
+require_once __DIR__ . '/../models/PlateformeTransactions.php';
 require_once __DIR__ . '/mailController.php';
 
 class ReservationController
@@ -324,6 +325,13 @@ class ReservationController
         if (!$paiementUtilisateur) {
             http_response_code(500);
             echo json_encode(["error" => "Erreur lors du paiement du conducteur"]);
+            return;
+        }
+        $montantPf = (2 * $reservation['nb_places']);
+        $paiementPf = PlateformeTransactions::addCredit($this->pdo, $montantPf);
+        if (!$paiementPf) {
+            http_response_code(500);
+            echo json_encode(["error" => "Erreur lors de l'enregistrement des crédits plateforme"]);
             return;
         }
         http_response_code(200);

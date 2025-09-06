@@ -243,4 +243,15 @@ class CovoiturageController
         echo json_encode(["message" => "Covoiturage terminé"]);
         return;
     }
+    public function historiqueCovoiturage()
+    {
+        $covoiturage = Covoiturage::getHistoriqueCovoiturage($this->pdo);
+        if (!$covoiturage || count($covoiturage) === 0) {
+            echo json_encode([]);
+            return;
+        }
+        http_response_code(200);
+        echo json_encode(securisationSortie($covoiturage));
+        return;
+    }
 }
