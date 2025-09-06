@@ -207,4 +207,26 @@ class Utilisateur
             $data['role_id'],
         ]);
     }
+    public static function suspendre(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE utilisateur SET
+            active = 0
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
+    public static function activer(PDO $pdo, $id)
+    {
+        $stmt = $pdo->prepare("
+        UPDATE utilisateur SET
+            active = 1
+        WHERE id = ?
+    ");
+        return $stmt->execute([
+            $id
+        ]);
+    }
 }

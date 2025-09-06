@@ -55,7 +55,17 @@ class UtilisateurController
     public function signIn($data)
     {
         $utilisateur = Utilisateur::findUtilisateurByMail($this->pdo, $data['email']);
+        if (!$utilisateur) {
+            http_response_code(401);
+            echo json_encode(["error" => "Identifiants invalides"]);
+            return;
+        }
 
+        if ((int)$utilisateur['active'] === 0) {
+            http_response_code(403);
+            echo json_encode(["error" => "Votre compte est suspendu"]);
+            return;
+        }
         if ($utilisateur && password_verify($data['password'], $utilisateur['password'])) {
             unset($utilisateur['password']);
             $auth = new AuthController();
@@ -222,5 +232,47 @@ class UtilisateurController
         }
         http_response_code(500);
         echo json_encode(["error" => "Insertion échouée"]);
+    }
+    public function suspendreCompte($id)
+    {
+        $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
+        if (!$utilisateur) {
+            http_response_code(404);
+            echo json_encode(["error" => "Utilisateur non trouvé."]);
+            return;
+        }
+        if ($utilisateur['active'] != 1) {
+            http_response_code(400);
+            echo json_encode(["error" => "Utilisateur deja suspendu."]);
+            return;
+        }
+        $suspension = Utilisateur::suspendre($this->pdo, $utilisateur['id']);
+        if ($suspension) {
+            echo json_encode(["message" => "Compte " . $utilisateur['id'] . " suspendu"]);
+            return;
+        }
+        http_response_code(500);
+        echo json_encode(["error" => "Erreur lors de la suspension"]);
+    }
+    public function reactiverCompte($id)
+    {
+        $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $id);
+        if (!$utilisateur) {
+            http_response_code(404);
+            echo json_encode(["error" => "Utilisateur non trouvé."]);
+            return;
+        }
+        if ($utilisateur['active'] != 0) {
+            http_response_code(400);
+            echo json_encode(["error" => "Utilisateur deja actif."]);
+            return;
+        }
+        $activer = Utilisateur::activer($this->pdo, $utilisateur['id']);
+        if ($activer) {
+            echo json_encode(["message" => "Compte " . $utilisateur['id'] . " réactivé"]);
+            return;
+        }
+        http_response_code(500);
+        echo json_encode(["error" => "Erreur lors de la réactivation"]);
     }
 }
