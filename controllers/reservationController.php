@@ -75,8 +75,7 @@ class ReservationController
             return;
         };
         if (empty($reservations)) {
-            http_response_code(404);
-            echo json_encode(["error" => "Aucune réservation trouvée"]);
+            echo json_encode([]);
             return;
         };
         foreach ($reservations as &$reservation) {
@@ -132,8 +131,7 @@ class ReservationController
             return;
         }
         if (empty($reservations)) {
-            http_response_code(404);
-            echo json_encode(["error" => "Aucune réservation trouvée"]);
+            echo json_encode([]);
             return;
         }
 
