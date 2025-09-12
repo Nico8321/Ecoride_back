@@ -112,8 +112,8 @@ class CovoiturageController
     {
         $covoiturages = Covoiturage::findCovoiturageByFilter($this->pdo, $filtres);
         if (!$covoiturages) {
-            http_response_code(404);
-            echo json_encode(["error" => "Aucun covoiturage trouvé"]);
+
+            echo json_encode([]);
             return;
         } else {
             foreach ($covoiturages as &$covoiturage) {
