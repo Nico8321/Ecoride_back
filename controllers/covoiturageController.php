@@ -89,6 +89,11 @@ class CovoiturageController
 
     public function addCovoiturage($data, $userId)
     {
+        if ($data['prix'] < 3) {
+            http_response_code(400);
+            echo json_encode(["error" => "Le prix minimum par place doit etre de 3 credits"]);
+            return;
+        }
         if ((int)$data['conducteurId'] !== (int)$userId) {
             http_response_code(403);
             echo json_encode(["error" => "Action interdite"]);
