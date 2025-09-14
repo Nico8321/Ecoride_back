@@ -2,7 +2,7 @@
 
 function getDureeTrajet($data)
 {
-    $url = "https://router.project-osrm.org/route/v1/driving/{$data['latitudeDepart']},{$data['longitudeDepart']};{$data['latitudeArrivee']},{$data['longitudeArrivee']}?overview=false";
+    $url = "https://router.project-osrm.org/route/v1/driving/{$data['longitudeDepart']},{$data['latitudeDepart']};{$data['longitudeArrivee']},{$data['latitudeArrivee']}?overview=false";
 
     $response = file_get_contents($url);
     if (!$response) {
