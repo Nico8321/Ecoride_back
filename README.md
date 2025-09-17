@@ -24,8 +24,11 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
 - Dotenv (`.env`)
 - CORS
 - API:
+
   - project-OSRM pour la gestion des temps de trajet
   - adresse.gouv pour la récupération des coordonnées GPS des adresses saisies
+
+- MongoDB (litiges via driver officiel mongodb/mongodb)
 
 ## 🏠 Structure
 
@@ -63,6 +66,7 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
 - Serveur PHP (XAMPP, MAMP, ou PHP CLI)
 - MySQL
 - Outil type Postman ou navigateur
+- driver officiel mongodb/mongodb(voir étape 2 si besoin )
 
 ### ⚙️ Étapes
 
@@ -73,13 +77,23 @@ git clone https://github.com/Nico8321/Ecoride_back.git
 cd Ecoride_back
 ```
 
-#### 2. Installer les dépendances
+#### 2. Installation du driver MongoDB pour PHP
+
+La bibliothèque PHP MongoDB est une abstraction de haut niveau pour l'extension PHP MongoDB,  
+l'installation de l'extention est obligatoire pour vous connecter à MongoDB et interagir avec les données stockées dans votre cluster.  
+👉[Lien vers la documentation mongoDB PHP Library](https://www.mongodb.com/docs/php-library/current/get-started/)
+
+```bash
+pie install mongodb/mongodb-extension
+```
+
+#### 3. Installer les dépendances
 
 ```
 composer install
 ```
 
-#### 3. Créer un fichier `.env` à la racine avec :
+#### 4. Créer un fichier `.env` à la racine avec :
 
 ```env
 DB_HOST=localhost
@@ -90,9 +104,10 @@ JWT_SECRET=VotreCléSecrèteIci0
 EMAIL= Adresse email utilisée pour l’envoi de mails aux utilisateurs
 PASSWORD_MAIL= Mot de passe ou clé SMTP
 MONGO_URI= URI de votre base mongoDb
+MONGO_DB= nom de la base MongoDb
 ```
 
-#### 4. Importer le fichier `ecoride.sql` dans MySQL
+#### 5. Importer le fichier `ecoride.sql` dans MySQL
 
 > - Lancer XAMPP
 > - Démarrer Apache et MySQL
@@ -102,15 +117,15 @@ MONGO_URI= URI de votre base mongoDb
 > - Aller dans l’onglet Import
 > - Choisir le fichier ecoride.sql
 > - Cliquer sur Exécuter
-> - > - Vous pouvez également importer le fichier [`ecoride_seed.sql`](./sql/ecoride_seed.sql) pour injecter les données de test (utilisateurs, covoiturages, etc...)
+> - Vous pouvez également importer le fichier [`ecoride_seed.sql`](./sql/ecoride_seed.sql) pour injecter les données de test (utilisateurs, covoiturages, etc...)
 
-#### 5. Lancer le serveur :
+#### 6. Lancer le serveur :
 
 ```
  php -S localhost:8000
 ```
 
-#### 6. Tester les routes via Postman ou depuis le frontend
+#### 7. Tester les routes via Postman ou depuis le frontend
 
 ## 📌 Routes principales (exemples)
 
@@ -127,5 +142,6 @@ MONGO_URI= URI de votre base mongoDb
 
 ## 🎁📝 Auteur
 
-**Nicolas Beuve**  
+**Nicolas Beuve**
+
 Projet réalisé dans le cadre du titre professionnel **DWWM** (Studi – _2025-2026_)
