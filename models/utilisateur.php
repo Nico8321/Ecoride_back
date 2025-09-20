@@ -10,7 +10,8 @@ class Utilisateur
     private $password;
     private $telephone;
     private $adresse;
-    private $photo;
+    private $photo_id;
+    private $photo_url;
     private $credit;
     private $role_id;
 
@@ -23,7 +24,8 @@ class Utilisateur
         $this->password = password_hash($data['password'], PASSWORD_BCRYPT);
         $this->telephone = $data['telephone'] ?? null;
         $this->adresse = $data['adresse'] ?? null;
-        $this->photo = $data['photo'] ?? null;
+        $this->photo_id = $data['photo_id'] ?? null;
+        $this->photo_url = $data['photo_url'] ?? null;
         $this->credit = (isset($data['credit']) && $data['credit'] !== null) ? intval($data['credit']) : 20;
         $this->role_id = $data['role_id'];
     }
@@ -60,9 +62,13 @@ class Utilisateur
     {
         return $this->adresse;
     }
-    public function getPhoto()
+    public function getPhotoId()
     {
-        return $this->photo;
+        return $this->photo_id;
+    }
+    public function getPhotoUrl()
+    {
+        return $this->photo_id;
     }
     public function getCredit()
     {
@@ -75,7 +81,7 @@ class Utilisateur
 
     public function save(PDO $pdo)   // enregistrer un nouvelle utilisateur dans la bdd 
     {
-        $stmt = $pdo->prepare("INSERT INTO utilisateur (pseudo, nom, prenom, email, password, telephone, adresse, photo, credit, role_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO utilisateur (pseudo, nom, prenom, email, password, telephone, adresse, photo_id, photo_url, credit, role_id) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $this->pseudo,
             $this->nom,
@@ -84,7 +90,8 @@ class Utilisateur
             $this->password,
             $this->telephone,
             $this->adresse,
-            $this->photo,
+            $this->photo_id,
+            $this->photo_url,
             $this->credit,
             $this->role_id
         ]);
@@ -149,10 +156,17 @@ class Utilisateur
             $id
         ]);
     }
-    public static function updatePhotoFilename(PDO $pdo, $id, $filename)
+    public static function getPhoto(PDO $pdo, $id)
     {
-        $stmt = $pdo->prepare("UPDATE utilisateur SET photo = ? WHERE id = ?");
-        return $stmt->execute([$filename, $id]);
+        $stmt = $pdo->prepare("SELECT photo_id FROM utilisateur WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function updatePhotoFilename(PDO $pdo, $id, $url, $photoId)
+    {
+        $stmt = $pdo->prepare("UPDATE utilisateur SET photo_url = ?, photo_id = ? WHERE id = ?");
+        return $stmt->execute([$url, $photoId, $id]);
     }
 
     public static function addCreditUtilisateur(PDO $pdo, $id, $credit)
