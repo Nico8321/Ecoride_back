@@ -24,7 +24,6 @@ INSERT INTO
         password,
         telephone,
         adresse,
-        photo,
         credit,
         role_id
     )
@@ -38,7 +37,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000001',
         NULL,
-        NULL,
         120,
         1
     ),
@@ -50,7 +48,6 @@ VALUES
         'claire.durand@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000002',
-        NULL,
         NULL,
         200,
         1
@@ -64,7 +61,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000003',
         NULL,
-        NULL,
         90,
         1
     ),
@@ -76,7 +72,6 @@ VALUES
         'emma.roux@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000004',
-        NULL,
         NULL,
         150,
         1
@@ -90,7 +85,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000005',
         NULL,
-        NULL,
         80,
         1
     ),
@@ -102,7 +96,6 @@ VALUES
         'sophie.garnier@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000006',
-        NULL,
         NULL,
         60,
         1
@@ -116,7 +109,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000007',
         NULL,
-        NULL,
         170,
         1
     ),
@@ -128,7 +120,6 @@ VALUES
         'nina.morel@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000008',
-        NULL,
         NULL,
         300,
         1
@@ -142,7 +133,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000009',
         NULL,
-        NULL,
         50,
         1
     ),
@@ -154,7 +144,6 @@ VALUES
         'elisa.lopez@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000010',
-        NULL,
         NULL,
         95,
         1
@@ -168,7 +157,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000011',
         NULL,
-        NULL,
         200,
         1
     ),
@@ -180,7 +168,6 @@ VALUES
         'camille.lemoine@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000012',
-        NULL,
         NULL,
         110,
         1
@@ -194,7 +181,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000013',
         NULL,
-        NULL,
         130,
         1
     ),
@@ -206,7 +192,6 @@ VALUES
         'laura.dupuis@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000014',
-        NULL,
         NULL,
         75,
         1
@@ -220,7 +205,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000015',
         NULL,
-        NULL,
         145,
         1
     ),
@@ -232,7 +216,6 @@ VALUES
         'alice.faure@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000016',
-        NULL,
         NULL,
         180,
         1
@@ -246,7 +229,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000017',
         NULL,
-        NULL,
         90,
         1
     ),
@@ -258,7 +240,6 @@ VALUES
         'chloe.lefevre@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000018',
-        NULL,
         NULL,
         70,
         1
@@ -272,7 +253,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000019',
         NULL,
-        NULL,
         155,
         1
     ),
@@ -284,7 +264,6 @@ VALUES
         'eva.robin@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000020',
-        NULL,
         NULL,
         200,
         1
@@ -298,7 +277,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000021',
         NULL,
-        NULL,
         95,
         1
     ),
@@ -310,7 +288,6 @@ VALUES
         'manon.lucas@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000022',
-        NULL,
         NULL,
         115,
         1
@@ -324,7 +301,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000023',
         NULL,
-        NULL,
         125,
         1
     ),
@@ -336,7 +312,6 @@ VALUES
         'sarah.gauthier@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000024',
-        NULL,
         NULL,
         135,
         1
@@ -350,7 +325,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000025',
         NULL,
-        NULL,
         85,
         1
     ),
@@ -362,7 +336,6 @@ VALUES
         'maya.marchand@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000026',
-        NULL,
         NULL,
         140,
         1
@@ -376,7 +349,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000027',
         NULL,
-        NULL,
         160,
         1
     ),
@@ -388,7 +360,6 @@ VALUES
         'leo.schmitt@mail.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000028',
-        NULL,
         NULL,
         105,
         1
@@ -402,7 +373,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000029',
         NULL,
-        NULL,
         190,
         1
     ),
@@ -415,7 +385,6 @@ VALUES
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
         '0600000030',
         NULL,
-        NULL,
         210,
         1
     ),
@@ -426,8 +395,7 @@ VALUES
         'Banner',
         'staff@ecoride.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
-        '0612345678',
-        '123 rue du Test',
+        NULL,
         NULL,
         0,
         2
@@ -439,7 +407,6 @@ VALUES
         'Stark',
         'admin@ecoride.com',
         '$2y$12$8Xs.7iZVogg3t4hpNCxYUumeVNOlXbUAZbVv.Uu3BBv95yl3wZqya',
-        '0612345678',
         NULL,
         NULL,
         0,

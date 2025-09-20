@@ -140,13 +140,6 @@ class UtilisateurController
                         return;
                     }
 
-                    // Sécurisation + déplacement du fichier
-                    $emplacement = __DIR__ . '/../uploads/photos/';
-                    // si le dossier n'existe pas, on le crée
-                    if (!file_exists($emplacement)) {
-                        mkdir($emplacement, 0777, true);
-                    }
-
                     $extension = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
                     $mimeType = mime_content_type($_FILES['photo']['tmp_name']);
 
@@ -177,16 +170,24 @@ class UtilisateurController
                         echo json_encode(["error" => "Fichier trop volumineux (max 2 Mo)."]);
                         return;
                     }
+                    $cloud = CloudinaryClient::getInstance();
+                    $photo = Utilisateur::getPhotoId($this->pdo, $id);
+                    if ($photo && !empty($photo['photo_id'])) {
+                        $cloud->uploadApi()->destroy($photo['photo_id']);
+                    }
+                    $result = $cloud->uploadApi()->upload(
+                        $_FILES['photo']['tmp_name'],
+                        ['public_id' => uniqid("user_{$id}_")]
+                    );
 
-                    $newFileName = uniqid("user_{$id}_", true) . '.' . $extension;
-                    $targetFile = $emplacement . $newFileName;
-                    // si le fichier est bien déplacé alors on l'enregistre en base
-                    if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
-                        Utilisateur::updatePhotoFilename($this->pdo, $id, $newFileName);
-                        echo json_encode(["message" => "Photo enregistrée avec succès", "filename" => $newFileName]);
+                    if ($result && isset($result['secure_url'], $result['public_id'])) {
+                        $url = $result['secure_url'];
+                        $photoId = $result['public_id'];
+                        Utilisateur::updatePhotoFilename($this->pdo, $id, $url, $photoId);
+                        echo json_encode(["message" => "Photo enregistrée avec succès", "fileUrl" => $url]);
                     } else {
                         http_response_code(500);
-                        echo json_encode(["error" => "Erreur lors du déplacement du fichier."]);
+                        echo json_encode(["error" => "Erreur lors de l'upload Cloudinary."]);
                     }
                     return;
                 } else {
