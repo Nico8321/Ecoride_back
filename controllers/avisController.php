@@ -29,8 +29,8 @@ class AvisController
                 $utilisateurId = $avis['auteur_id'];
                 $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $utilisateurId);
                 if ($utilisateur) {
-                    $avis['auteur_photo'] = $utilisateur['photo']
-                        ?  $utilisateur['photo']
+                    $avis['auteur_photo'] = $utilisateur['photo_url']
+                        ?  $utilisateur['photo_url']
                         : null;
                     $avis['auteur_pseudo'] = $utilisateur['pseudo'];
                 }
@@ -46,8 +46,8 @@ class AvisController
                 $utilisateurId = $avis['auteur_id'];
                 $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $utilisateurId);
                 if ($utilisateur) {
-                    $avis['auteur_photo'] = $utilisateur['photo']
-                        ?  $utilisateur['photo']
+                    $avis['auteur_photo'] = $utilisateur['photo_url']
+                        ?  $utilisateur['photo_url']
                         : null;
                     $avis['auteur_pseudo'] = $utilisateur['pseudo'];
                 }

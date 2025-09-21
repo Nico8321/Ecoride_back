@@ -41,8 +41,8 @@ class CovoiturageController
                 $conducteurId = $covoiturage['conducteur_id'];
                 $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $conducteurId);
                 if ($utilisateur) {
-                    $covoiturage['conducteur_photo'] = $utilisateur['photo']
-                        ?  $utilisateur['photo']
+                    $covoiturage['conducteur_photo'] = $utilisateur['photo_url']
+                        ?  $utilisateur['photo_url']
                         : null;
                     $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
                     $avis = Avis::getMoyenneByUtilisateurId($this->pdo, $conducteurId);
@@ -125,8 +125,8 @@ class CovoiturageController
                 $conducteurId = $covoiturage['conducteur_id'];
                 $utilisateur = Utilisateur::findUtilisateurById($this->pdo, $conducteurId);
                 if ($utilisateur) {
-                    $covoiturage['conducteur_photo'] = $utilisateur['photo']
-                        ?  $utilisateur['photo']
+                    $covoiturage['conducteur_photo'] = $utilisateur['photo_url']
+                        ?  $utilisateur['photo_url']
                         : null;
                     $covoiturage['conducteur_pseudo'] = $utilisateur['pseudo'];
                     $avis = Avis::getMoyenneByUtilisateurId($this->pdo, $conducteurId);
