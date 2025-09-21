@@ -86,7 +86,7 @@ class ReservationController
                 // Enrichir avec conducteur
                 $conducteur = Utilisateur::findUtilisateurById($this->pdo, $covoiturage['conducteur_id']);
                 if ($conducteur) {
-                    $covoiturage['conducteur_photo'] = $conducteur['photo'] ?? null;
+                    $covoiturage['conducteur_photo'] = $conducteur['photo_url'] ?? null;
                     $covoiturage['conducteur_pseudo'] = $conducteur['pseudo'];
                     $avis = Avis::getMoyenneByUtilisateurId($this->pdo, $covoiturage['conducteur_id']);
                     $covoiturage['conducteur_note'] = $avis;
@@ -140,7 +140,7 @@ class ReservationController
             $utilisateur = Utilisateur::findUtilisateurById($this->pdo,  $utilisateurId);
             if ($utilisateur) {
                 $reservation["utilisateur_pseudo"] = $utilisateur["pseudo"];
-                $reservation['utilisateur_photo'] = $utilisateur['photo'];
+                $reservation['utilisateur_photo'] = $utilisateur['photo_url'];
             }
         }
 
