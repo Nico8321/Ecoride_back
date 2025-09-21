@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../models/utilisateur.php';
 require_once __DIR__ . '/../models/vehicule.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/cloudinary.php';
 require_once __DIR__ . '/../utils/securisationSortie.php';
 require_once __DIR__ . '/../controllers/authController.php';
 
@@ -171,7 +172,7 @@ class UtilisateurController
                         return;
                     }
                     $cloud = CloudinaryClient::getInstance();
-                    $photo = Utilisateur::getPhotoId($this->pdo, $id);
+                    $photo = Utilisateur::getPhoto($this->pdo, $id);
                     if ($photo && !empty($photo['photo_id'])) {
                         $cloud->uploadApi()->destroy($photo['photo_id']);
                     }

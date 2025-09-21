@@ -34,6 +34,9 @@ function securisationSortie($data)
 
 
     if (is_string($data)) {
+        if (filter_var($data, FILTER_VALIDATE_URL)) {
+            return $data;
+        }
         return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
     }
 
