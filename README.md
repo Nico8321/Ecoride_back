@@ -1,5 +1,11 @@
 # EcoRide – Backend
 
+![PHP](https://img.shields.io/badge/PHP-8.2-blue)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
+![Heroku](https://img.shields.io/badge/deploy-Heroku-430098?logo=heroku&logoColor=white)
+![Licence](https://img.shields.io/badge/Licence-MIT-green)
+![Status](https://img.shields.io/badge/status-Stable-success)
+
 ## 📝 Description
 
 Backend de l'application EcoRide, destiné à gérer les utilisateurs, les covoiturages, les réservations, les avis, les litiges, et le stockage de photos.  
