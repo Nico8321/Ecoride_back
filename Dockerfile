@@ -1,35 +1,35 @@
-FROM php:8.2-fpm
+FROM php:8.2-fpm-alpine
 
-# Installation des dépendances système nécessaires (Mongo, zip, mbstring, etc.)
-RUN apt-get update && apt-get install -y \
-    zlib1g-dev \
-    libzip-dev \
-    libssl-dev \
-    unzip \
-    git \
-    && docker-php-ext-install pdo pdo_mysql zip
+# Nginx + Supervisor (pour lancer plusieurs services)
+RUN apk add --no-cache nginx supervisor
 
-# Installation de l'extension MongoDB via PECL
-RUN pecl install mongodb \
-    && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongodb.ini
+# Extensions PHP
+RUN apk add --no-cache autoconf gcc g++ make \
+    && docker-php-ext-install pdo pdo_mysql \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
+    && apk del autoconf gcc g++ make
 
-# Installe Composer
+# Dossier nécessaire pour nginx
+RUN mkdir -p /run/nginx
+
+# Config Nginx
+COPY docker-nginx.conf /etc/nginx/http.d/default.conf
+
+# Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Définit le dossier de travail
+# Installation du projet PHP
 WORKDIR /var/www/html
 
-# Copie le code dans le conteneur
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --prefer-dist --no-interaction
+
+# Copie du projet
 COPY . .
 
-# Installation les dépendances PHP 
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Config Supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Permissions 
-RUN chown -R www-data:www-data /var/www/html
 
-# Expose le port 9000
-EXPOSE 9000
-
-# Le conteneur PHP-FPM démarre automatiquement avec l'image
-CMD ["php-fpm"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
