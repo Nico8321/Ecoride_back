@@ -7,14 +7,17 @@ if (file_exists($envPath . '/.env')) {
     $dotenv->load();
 }
 
-//CORS
-if ($_SERVER['SERVER_NAME'] === 'localhost') {
-    $allowedOrigin = 'http://localhost:3000';
-} else {
-    $allowedOrigin = 'https://ecoride-front-w7vl.vercel.app';
-}
+// CORS
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-header("Access-Control-Allow-Origin: $allowedOrigin");
+$allowedOrigins = [
+    'http://localhost:3000',
+    'https://ecoride-front-w7vl.vercel.app'
+];
+
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+}
 header('Access-Control-Allow-Methods: GET, POST, PUT,PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
