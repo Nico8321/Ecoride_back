@@ -28,5 +28,8 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 # Permissions 
 RUN chown -R www-data:www-data /var/www/html
 
+# Expose le port 9000
+EXPOSE 9000
+
 # Le conteneur PHP-FPM démarre automatiquement avec l'image
 CMD ["php-fpm"]
