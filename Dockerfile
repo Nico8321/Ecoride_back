@@ -1,11 +1,19 @@
 FROM php:8.2-fpm-alpine
 
-RUN apk add --no-cache nginx supervisor gettext autoconf gcc g++ make
+RUN apk add --no-cache nginx supervisor gettext
 
-RUN docker-php-ext-install pdo pdo_mysql
-
-RUN pecl install mongodb \
-    && docker-php-ext-enable mongodb
+# PHP extensions MySQL + MongoDB avec support SSL
+RUN apk add --no-cache \
+        autoconf \
+        gcc \
+        g++ \
+        make \
+        openssl \
+        openssl-dev \
+    && docker-php-ext-install pdo pdo_mysql \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
+    && apk del autoconf gcc g++ make
 
 RUN mkdir -p /run/nginx
 
