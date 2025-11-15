@@ -1,5 +1,11 @@
 # EcoRide – Backend
 
+![PHP](https://img.shields.io/badge/PHP-8.2-blue)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
+![Heroku](https://img.shields.io/badge/deploy-Heroku-430098?logo=heroku&logoColor=white)
+![Licence](https://img.shields.io/badge/Licence-MIT-green)
+![Status](https://img.shields.io/badge/status-Stable-success)
+
 ## 📝 Description
 
 Backend de l'application EcoRide, destiné à gérer les utilisateurs, les covoiturages, les réservations, les avis, les litiges, et le stockage de photos.  
@@ -12,7 +18,7 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
 - Création et recherche de trajets de covoiturage
 - Réservation d’un trajet
 - Dépôt et récupération d’avis
-- Upload et accès aux photos de profil
+- Upload et accès aux photos de profil (stockage sur cloudinary)
 - Accès sécurisé selon le rôle (admin / utilisateur / employé)
 
 ## 🛠️ Technologies utilisées
@@ -29,6 +35,7 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
   - adresse.gouv pour la récupération des coordonnées GPS des adresses saisies
 
 - MongoDB (litiges via driver officiel mongodb/mongodb)
+- Cloudinary (stockage et gestion des photos de profil)
 
 ## 🏠 Structure
 
@@ -67,6 +74,8 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
 - MySQL
 - Outil type Postman ou navigateur
 - driver officiel mongodb/mongodb(voir étape 2 si besoin )
+- Compte Cloudinary (pour gérer l’hébergement des images).
+- Cluster MongoDB (MongoDB Atlas, ou local, pour gérer les litiges)
 
 ### ⚙️ Étapes
 
@@ -103,8 +112,12 @@ DB_PASS=
 JWT_SECRET=VotreCléSecrèteIci
 EMAIL= Adresse email utilisée pour l’envoi de mails aux utilisateurs
 PASSWORD_MAIL= Mot de passe ou clé SMTP
-MONGO_URI= URI de votre base mongoDb
+MONGO_URI= URI mongoDb atlas : mongodb+srv://<username>:<password>@cluster0.mongodb.net/ , ou local: mongodb://localhost:XXXX
 MONGO_DB= nom de la base MongoDb
+CLOUDINARY_CLOUD_NAME=yourCloudName
+CLOUDINARY_API_KEY=yourApiKey
+CLOUDINARY_API_SECRET=yourApiSecret
+
 ```
 
 #### 5. Importer le fichier `ecoride.sql` dans MySQL
