@@ -3,6 +3,7 @@
 ![PHP](https://img.shields.io/badge/PHP-8.2-blue)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
 ![Heroku](https://img.shields.io/badge/deploy-Heroku-430098?logo=heroku&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Heroku%20Container%20Stack-430098?logo=docker)
 ![Licence](https://img.shields.io/badge/Licence-MIT-green)
 ![Status](https://img.shields.io/badge/status-Stable-success)
 
@@ -11,6 +12,8 @@
 Backend de l'application EcoRide, destiné à gérer les utilisateurs, les covoiturages, les réservations, les avis, les litiges, et le stockage de photos.  
 L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et communique avec un frontend JavaScript disponible 👉 [ici](https://github.com/Nico8321/Ecoride_front.git)
 
+Déploiement en production via Heroku (stack container) avec une image Docker personnalisée (php-fpm + nginx + supervisor).
+
 ## 🕹️Fonctionnalités principales
 
 - Authentification (inscription, connexion, tokens JWT)
@@ -18,10 +21,12 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
 - Création et recherche de trajets de covoiturage
 - Réservation d’un trajet
 - Dépôt et récupération d’avis
-- Upload et accès aux photos de profil (stockage sur cloudinary)
+- Upload et accès aux photos de profil (stockage sur Cloudinary)
 - Accès sécurisé selon le rôle (admin / utilisateur / employé)
 
 ## 🛠️ Technologies utilisées
+
+### Backend
 
 - PHP 8.x (sans framework)
 - MySQL (via PDO)
@@ -36,6 +41,23 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
 
 - MongoDB (litiges via driver officiel mongodb/mongodb)
 - Cloudinary (stockage et gestion des photos de profil)
+- PHPMailer
+
+### Conteneurisation
+
+- Docker
+- php-fpm
+- nginx
+- supervisor
+- Heroku stack container
+
+## 🚀 Déploiement (Heroku)
+
+L’API est déployée sur Heroku via la stack _container_ :
+
+- Build Docker via `heroku container:push`
+- Release via `heroku container:release`
+- nginx + php-fpm gérés par supervisord
 
 ## 🏠 Structure
 
@@ -43,8 +65,11 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
 - `/controllers` → logique métier (utilisateurs, covoiturages, réservations…)
 - `/models` → accès base de données (PDO)
 - `/routes` → endpoints REST
-- `/utils` → APIs, modèles de mail pour PHPMailer, fonctions de sécurisation des sorties, `requireAuth.php` pour la verification des userId et des roles
-- `/config` → connection aux bases de données
+- `/utils` → APIs, modèles de mail pour PHPMailer, fonctions de sécurisation des sorties, `requireAuth.php` pour la vérification des userId et des rôles
+- `/config` → connexion aux bases de données
+- `docker-nginx.conf` → config nginx
+- `supervisord.conf` → lance nginx + php-fpm
+- `Dockerfile` → image Heroku
 
 ## 🔒 Sécurité mise en place
 
@@ -66,7 +91,35 @@ L’API est développée en PHP procédural avec PDO, sécurisée via JWT, et co
 
 - Tests d’erreurs : saisie de données incorrectes, formulaires incomplets, mauvais identifiants.
 
-## 🚀 Démarrer le projet
+## 🔥 Lancer l’API avec Docker (méthode officielle)
+
+### 🔧 Prérequis
+
+- Docker installé
+
+### ⚙️ Étapes
+
+#### 1. Créer un fichier `.env` à la racine avec :
+
+voir `.env.example` partie MODE DOCKER & CONFIG COMMUNE.
+
+#### 2. Build
+
+`docker build -t ecoride-local . `
+
+Puis lancer le conteneur
+
+`docker run -p 8080:8080 --env-file .env ecoride-local `
+
+API accessible sur :
+👉 http://localhost:8080
+
+⚠️ MongoDB + extension PHP sont déjà installés dans le Dockerfile
+→ aucune manipulation locale nécessaire.
+
+---
+
+## 🧩 2 — Installation sans Docker (optionnel)
 
 ### 🔧 Prérequis
 
@@ -89,11 +142,11 @@ cd Ecoride_back
 #### 2. Installation du driver MongoDB pour PHP
 
 La bibliothèque PHP MongoDB est une abstraction de haut niveau pour l'extension PHP MongoDB,  
-l'installation de l'extention est obligatoire pour vous connecter à MongoDB et interagir avec les données stockées dans votre cluster.  
+l'installation de l'extension est obligatoire pour vous connecter à MongoDB et interagir avec les données stockées dans votre cluster.  
 👉[Lien vers la documentation mongoDB PHP Library](https://www.mongodb.com/docs/php-library/current/get-started/)
 
 ```bash
-pie install mongodb/mongodb-extension
+pecl install mongodb
 ```
 
 #### 3. Installer les dépendances
@@ -103,6 +156,8 @@ composer install
 ```
 
 #### 4. Créer un fichier `.env` à la racine avec :
+
+Voir le `.env.example` partie CONFIG COMMUNE
 
 ```env
 DB_HOST=localhost
